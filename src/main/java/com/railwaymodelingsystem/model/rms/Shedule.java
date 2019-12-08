@@ -1,5 +1,6 @@
 package com.railwaymodelingsystem.model.rms;
 
+import com.railwaymodelingsystem.model.rms.compositeKey.ShedulePrimary;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,10 +20,7 @@ public class Shedule implements Serializable {
 
     @MapsId("stationId")
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
-    @JoinColumns(value = {
-            @JoinColumn(name = "shedule_number", referencedColumnName = "shedule_number"),
-            @JoinColumn(name = "station_id", referencedColumnName = "station_id")
-    })
+    @JoinColumn(name = "station_id", referencedColumnName = "station_id", foreignKey = @ForeignKey(name = "FK_Station_Id"))
     private Station station;
 
     @Getter
@@ -45,21 +43,4 @@ public class Shedule implements Serializable {
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "train_type", nullable = false, foreignKey = @ForeignKey(name = "FK_TrainType"))
     private TrainType trainType;
-
-
-    @EqualsAndHashCode
-    @ToString
-    @Embeddable
-    public class ShedulePrimary implements Serializable {
-
-        @Getter
-        @Setter
-        @Column(name = "shedule_number")
-        private Integer number;
-
-        @Getter
-        @Setter
-        @Column(name = "station_id")
-        private Integer stationId;
-    }
 }

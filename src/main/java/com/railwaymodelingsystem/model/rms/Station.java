@@ -27,9 +27,4 @@ public class Station implements Serializable {
     @ManyToOne (optional=false, cascade=CascadeType.ALL)
     @JoinColumn (name="city_name", foreignKey = @ForeignKey(name = "FK_CityName"))
     private City city;
-
-    @Getter
-    @Setter
-    @OneToMany (mappedBy="station_id", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    private Collection<Shedule> shedules;
 }
