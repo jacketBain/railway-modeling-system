@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/login.css">
+</head>
+<body>
+<form id="loginForm" class="form-signin text-center" type="submit" action="/signup/add" method="post" novalidate>
+    <h1 class="h3 mb-3 font-weight-normal">Регистрация:</h1>
+    <label for="inputLogin" class="sr-only">Логин</label>
+    <input id="inputLogin" name="username" type="text"class="form-control" placeholder="Введите логин" pattern = "^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
+    <div id="loginError" class="error" aria-live="polite"></div>
+
+    <label for="inputPassword" class="sr-only">Пароль</label>
+    <input name="password"id="inputPassword" type="password" class="form-control" placeholder="Введите пароль"
+            pattern="^[A-za-z0-9_-]{8,}" required>
+    <div id="passwordError" class="error" aria-live="polite"></div>
+
+    <label for="inputPassword2" class="sr-only">Пароль</label>
+    <input id="inputPassword2" type="password"  class="form-control" placeholder="Введите пароль повторно" required>
+    <div id="password2Error" class="error" aria-live="polite"></div>
+
+    <button id="signupButton" class="btn btn-lg btn-primary btn-block" type="submit">Зарегистрироваться</button>
+</form>
+
+<script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
+<script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/signup.js" crossorigin="anonymous"></script>
+</body>
+</html>
