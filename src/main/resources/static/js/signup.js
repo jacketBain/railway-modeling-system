@@ -10,7 +10,7 @@ var password2Error = document.getElementById('password2Error');
 function showError(field){
     switch (field) {
         case "login":
-            loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+            loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible mt-2 mb-2\" role=\"alert\">\n" +
                 "\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                 "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                 "\t</button>\n" +
@@ -21,7 +21,7 @@ function showError(field){
                 "</div>";
             break;
         case "password":
-            passwordError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+            passwordError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible mt-2 mb-2\" role=\"alert\">\n" +
                 "\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                 "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                 "\t</button>\n" +
@@ -31,7 +31,7 @@ function showError(field){
                 "</div>";
             break;
         case "password2":
-            password2Error.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+            password2Error.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible mt-2 mb-2\" role=\"alert\">\n" +
                 "\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                 "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                 "\t</button>\n" +
@@ -39,7 +39,7 @@ function showError(field){
                 "</div>";
             break;
         case "occupied":
-            loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+            loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible mt-2 mb-2\" role=\"alert\">\n" +
                 "\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                 "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                 "\t</button>\n" +
@@ -58,7 +58,7 @@ function loginIsFree(){
             if(data.status === "SUCCESS")
                 loginError.innerHTML = "";
             else
-                loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible\" role=\"alert\">\n" +
+                loginError.innerHTML = "<div id=\"warning\" class=\"alert alert-danger alert-dismissible mt-2 mb-2\" role=\"alert\">\n" +
                     "\t<button type=\"button\" class=\"close\" data-dismiss=\"alert\" aria-label=\"Close\">\n" +
                     "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                     "\t</button>\n" +
@@ -81,6 +81,9 @@ login.addEventListener("input", function () {
         }
     }
     else{
+        if(login.value === "")
+            loginError.innerHTML = "";
+        else
         showError("login");
     }
 
@@ -120,8 +123,7 @@ form.addEventListener("submit", function (event) {
                $.get({
                    url: '/',
                    success: function () {
-
-                       $(location).attr('href','/');
+                       $(location).attr('href','/home');
                    }
                });
             }

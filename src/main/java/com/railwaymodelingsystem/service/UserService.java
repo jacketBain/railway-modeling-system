@@ -1,8 +1,8 @@
 package com.railwaymodelingsystem.service;
 
-import com.railwaymodelingsystem.model.UserEntity;
+import com.railwaymodelingsystem.model.User;
 
 public interface UserService {
-    UserEntity addUser(UserEntity userEntity);
-    UserEntity getByName(String name);
+    User addUser(User user);
+    User getByName(String name);
 }

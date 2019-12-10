@@ -15,11 +15,7 @@ public class City implements Serializable {
     @Id
     @Getter
     @Setter
+    @NotNull
     @Column(name = "name")
     private String name;
-
-    @Getter
-    @Setter
-    @OneToMany (mappedBy="city", cascade = CascadeType.ALL, fetch=FetchType.LAZY)
-    private Collection<Station> stations;
 }

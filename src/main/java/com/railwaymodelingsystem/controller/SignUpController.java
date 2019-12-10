@@ -2,14 +2,13 @@ package com.railwaymodelingsystem.controller;
 
 
 import com.railwaymodelingsystem.model.AjaxResponseBody;
-import com.railwaymodelingsystem.model.UserEntity;
+import com.railwaymodelingsystem.model.User;
 import com.railwaymodelingsystem.service.UserService;
 import com.railwaymodelingsystem.utils.EncryptedPasswordUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 
@@ -40,7 +39,7 @@ public class SignUpController {
     }
 
     @PostMapping(value = "/signup", produces = "application/json")
-    public ResponseEntity<AjaxResponseBody> addUser(@NotNull @ModelAttribute UserEntity user){
+    public ResponseEntity<AjaxResponseBody> addUser(@NotNull @ModelAttribute User user){
         String password = EncryptedPasswordUtils.encryptePassword(user.getPassword());
         user.setPassword(password);
         userService.addUser(user);
