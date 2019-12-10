@@ -15,7 +15,7 @@ function showError(field){
                 "\t\t<span aria-hidden=\"true\">&times;</span>\n" +
                 "\t</button>\n" +
                 "\tДлина логина: 3-30 символов.\n" +
-                "\tДопустимые символы:\n" +
+                "\tДопустимые символы:\r\n" +
                 "\t1. Латинские буквы, цифры, дефисы, знаки подчеркивания.\n" +
                 "\t2. Первый символ буква.\n" +
                 "</div>";
@@ -120,12 +120,13 @@ form.addEventListener("submit", function (event) {
             data : { 'username' : login.value, 'password' : password.value },
             response: 'text',
             success : function() {
-               $.get({
-                   url: '/',
-                   success: function () {
-                       $(location).attr('href','/home');
-                   }
-               });
+                $.post(
+                    "/j_spring_security_check",
+                    {'username' : login.value, 'password' : password.value},
+                    function () {
+                        window.location.replace("/home");
+                    }
+                )
             }
         });
     }

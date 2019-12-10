@@ -1,12 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Добропожаловать в "RailwayModelingSystem"</title>
+    <link rel="shortcut icon" href="img/shortcutIcon.png" type="image/x-icon">
+    <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
 
-<script src="webjars/fabric.js/1.4.12/fabric.min.js"></script>
-<script src="js/home.js"></script>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/" >
+            <img src="img/mainLogo.png" alt="" width="48" hight="48">
+            Система моделирования работы ЖД станции
+        </a>
+        <form class="form-inline">
+            <span class="badge badge-pill badge-success mr-1 float-right" th:utext="${user}"></span>
+            <button class="btn btn-outline-danger my-2 my-sm-1 float-right">
+                <a href="/logout">Выйти</a>
+            </button>
+        </form>
+    </nav>
+</head>
+
+<body>
+<div class="container">
+    <div class="row mt-4">
+        <p class="font-weight-light"><big><big>Главное меню:</big></big></p>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-secondary ml-2 mr-2 mb-2 mt-2 btn-lg btn-block">Конструктор топологии ЖД</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-secondary ml-2 mr-2 mb-2 mt-2 btn-lg btn-block">Менеджер расписаний</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-secondary ml-2 mr-2 mb-2 mt-2 btn-lg btn-block">Моделирование и визуализация</button>
+    </div>
+    <div class="row">
+        <button type="button" class="btn btn-secondary ml-2 mr-2 mb-2 mt-2 btn-lg btn-block">О программе</button>
+    </div>
+</div>
+
+<script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
+<script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

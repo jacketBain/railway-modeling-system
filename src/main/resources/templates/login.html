@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title th:utext="${title}"></title>
+    <title>Авторизация</title>
     <link rel="shortcut icon" href="img/shortcutIcon.png" type="image/x-icon">
     <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
     <style>
@@ -18,8 +18,8 @@
     </style>
     <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
 
-        <a class="navbar-brand" >
-            <img src="img/mainLogo.png" alt="" width="48" height="48">
+        <a class="navbar-brand">
+            <img src="img/mainLogo.png" width="48" height="48">
             Система моделирования работы ЖД станции
         </a>
     </nav>
@@ -27,26 +27,27 @@
 <body>
 
 <div class="container-signin">
-            <form class="form-signin text-center " th:action="@{/j_spring_security_check}" method='POST'>
-                <h1 class="h3 mb-3 font-weight-normal">Вход в систему:</h1>
+    <form class="form-signin text-center " th:action="@{/j_spring_security_check}" method='POST'>
+        <h1 class="h3 mb-3 font-weight-normal">Вход в систему:</h1>
 
-                <input name="username" type="text" id="inputLogin" class="form-control mb-2" placeholder="Логин" required autofocus>
+        <input name="username" type="text" id="inputLogin" class="form-control mb-2" placeholder="Логин" required autofocus>
 
-                <input name="password" type="password" id="inputPassword" class="form-control mb-2" placeholder="Пароль" required>
-                <div th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">
-                    <div id="warning" class="alert alert-danger alert-dismissible" role="alert">
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span></button>
-                        Неверное имя пользователя или пароль
-                    </div>
-                </div>
-                <button class="btn btn-lg btn-primary btn-block mb-2" type="submit">Войти</button>
-            </form>
-    <a href="/signup"><p align="center">Регистрация</p></a>
+        <input name="password" type="password" id="inputPassword" class="form-control mb-2" placeholder="Пароль" required>
+
+        <div th:if="${#session!= null and #session.getAttribute('SPRING_SECURITY_LAST_EXCEPTION') != null}">
+            <div id="warning" class="alert alert-danger alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></button>
+                Неверное имя пользователя или пароль
+            </div>
         </div>
 
-
-
+        <button class="btn btn-lg btn-primary btn-block mb-2" type="submit">Войти</button>
+    </form>
+    <a align = "center" href="/signup">
+        <p>Регистрация</p>
+    </a>
+</div>
 
 <script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
 <script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
