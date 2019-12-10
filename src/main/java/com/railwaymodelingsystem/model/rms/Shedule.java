@@ -48,6 +48,20 @@ public class Shedule implements Serializable {
     @Getter
     @Setter
     @NotNull
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_from", nullable = false, foreignKey = @ForeignKey(name = "FK_SheduleCityFrom"))
+    private City cityFrom;
+
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne(optional = false, cascade = CascadeType.ALL)
+    @JoinColumn(name = "city_to", nullable = false, foreignKey = @ForeignKey(name = "FK_SheduleCityTo"))
+    private City cityTo;
+
+    @Getter
+    @Setter
+    @NotNull
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "shedule_train_type", nullable = false, foreignKey = @ForeignKey(name = "FK_SheduleTrainType"))
     private TrainType trainType;

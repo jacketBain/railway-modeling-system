@@ -1,1 +1,3 @@
-var canvas = new fabric.Canvas('drawArea');
+function openConstructor() {
+    window.location.href = "/start_Constructor";
+}

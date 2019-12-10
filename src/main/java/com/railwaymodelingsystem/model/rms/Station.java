@@ -30,11 +30,11 @@ public class Station implements Serializable {
     @ManyToOne(optional = false, cascade = CascadeType.ALL)
     @JoinColumn(name="user_login", nullable = false, foreignKey = @ForeignKey(name = "FK_Login"))
     private User user;
-
-    @Getter
-    @Setter
-    @NotNull
-    @ManyToOne (optional=false, cascade=CascadeType.ALL)
-    @JoinColumn (name="city_name", nullable = false, foreignKey = @ForeignKey(name = "FK_CityName"))
-    private City city;
+//
+//    @Getter
+//    @Setter
+//    @NotNull
+//    @ManyToOne (optional=false, cascade=CascadeType.ALL)
+//    @JoinColumn (name="city_name", nullable = false, foreignKey = @ForeignKey(name = "FK_CityName"))
+//    private City city;
 }
