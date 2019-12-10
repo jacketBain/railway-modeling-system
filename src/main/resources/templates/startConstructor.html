@@ -5,7 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Выбор станции</title>
     <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
-
+    <style>
+        .container-chose {
+            min-width: 400px;
+            max-width: 550px;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-top: 10%;
+        }
+    </style>
 <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
 	<a class="navbar-brand" href="/home" >
 		<img src="/img/back.png" alt="">
@@ -17,15 +28,16 @@
 </head>
 <body>
 	
-<div class="container">
-	<div class="row">
+<div class="container-chose">
+	<div class="row flex-column">
 		<p>Выберите станцию:</p>
     </div>
-    <div class = "row">
+    <div class = "row flex-column">
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action">Станция</a>
-            <a href="#" class="list-group-item list-group-item-action">Станция_1</a>
             <a href="#" class="list-group-item list-group-item-primary">Создать новую...</a>
+            <div th:if="${!stations.isEmpty()}" th:each="station : ${stations}">
+                <a class="list-group-item list-group-item-action" th:text="${station.getName()}"></a>
+            </div>
         </div>
     </div>
 </div>
