@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:if="${stationName != null}">
+        <div id="stationNameVal" th:name="${stationName}" style="display: none"></div>
+    </div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Конструктор топологии</title>
+    <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/home" >
+            <img src="img/back.png" alt="">
+            Конструктор топологии
+        </a>
+        <img src="img/road.png" alt="">
+    </nav>
+	
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <canvas id="canvas">
+
+            </canvas>
+        </div>
+        <div class="col-md-4">
+            Тут панель инструментов
+        </div>
+    </div>
+</div>
+
+
+<script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
+<script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/constructor.js"></script>
+
+</body>
+</html>

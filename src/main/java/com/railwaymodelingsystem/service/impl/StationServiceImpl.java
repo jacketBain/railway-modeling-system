@@ -1,18 +1,33 @@
 package com.railwaymodelingsystem.service.impl;
 
+import com.railwaymodelingsystem.model.User;
 import com.railwaymodelingsystem.model.rms.Station;
 import com.railwaymodelingsystem.repository.StationRepository;
 import com.railwaymodelingsystem.service.StationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class StationServiceImpl implements StationService {
-    @Autowired
-    private StationRepository stationRepository;
+    private final StationRepository stationRepository;
+
+    public StationServiceImpl(StationRepository stationRepository) {
+        this.stationRepository = stationRepository;
+    }
 
     @Override
     public Station addStation(Station station) {
         return stationRepository.saveAndFlush(station);
     }
+
+    @Override
+    public Boolean isExists(String station, User user) {
+       return stationRepository.existsByNameAndUser(station, user);
+    }
+
+    @Override
+    public Station getStationByName(String name) {
+        return stationRepository.findByName(name);
+    }
+
+
 }

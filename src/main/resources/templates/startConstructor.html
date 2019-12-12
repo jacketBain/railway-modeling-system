@@ -27,14 +27,42 @@
 
 </head>
 <body>
-	
+
+<!--Модальное окно-->
+<div class="modal fade" id="createStationModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Создание новой станции</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputName">Имя станции</span>
+                    </div>
+                    <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="stationNameError"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="createStation()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container-chose">
 	<div class="row flex-column">
 		<p>Выберите станцию:</p>
     </div>
     <div class = "row flex-column">
         <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-primary">Создать новую...</a>
+            <a data-toggle="modal" data-target="#createStationModal" class="list-group-item list-group-item-primary list-group-item-action">Создать новую...</a>
             <div th:if="${!stations.isEmpty()}" th:each="station : ${stations}">
                 <a class="list-group-item list-group-item-action" th:text="${station.getName()}"></a>
             </div>
@@ -45,5 +73,6 @@
 <script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
 <script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/startConstructor.js"></script>
 </body>
 </html>

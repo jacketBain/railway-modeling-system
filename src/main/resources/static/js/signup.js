@@ -64,9 +64,6 @@ function loginIsFree(){
                     "\t</button>\n" +
                     "\tПользователь с таким именем уже существует.\n" +
                     "</div>"
-        },
-        error: function (e) {
-            console.log("ERROR : ", e);
         }
     });
 }
