@@ -1,0 +1,616 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<diagram program="umlet" version="14.3.0">
+  <zoom_level>7</zoom_level>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>441</x>
+      <y>511</y>
+      <w>189</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>Путь
+--
+-ид: Integer
+-номер: Integer
+--
++получитьИд(): Integer
++получитьНомер(): Integer
++установитьНомер(номер: Integer): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>70</y>
+      <w>196</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>/Перечисление/
+Тип поезда
+--
+-название: String
+-максимальнаяДлина: Integer
+-минимальнаяДлина: Integer
+--
++получитьНазвание(): String
++получитьМинимальнуюДлину(): Integer
++получитьМаксимальнуюДлину(): Integer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>686</x>
+      <y>196</y>
+      <w>147</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>Город
+--
+-название: String
+--
++получитьНазвание(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>280</y>
+      <w>210</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>Станция
+--
+-ид: Integer
+-название: String
+-топология: Топология
+-расписания: List&lt;Расписание&gt;
+--
++получитьИд(): Integer
++получитьНазвание(): String
++получитьТопологию(): Топология
++установитьНазвание(название: String): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>308</y>
+      <w>301</w>
+      <h>175</h>
+    </coordinates>
+    <panel_attributes>Расписание
+--
+-поезд: Поезд
+-станция: Станция
+-номерПути: Integer
+-времяПрибытия: Long
+-времяОтправления: Long
+--
++получитьСтанцию(): Станция
++получитьНомерПути(): Integer
++получитьВремяПрибытия(): Long
++получитьВремяОтправления(): Long
++установитьНомерПути(номерПути: Integer): void
++установитьВремяПрибытия(времяПрибытия: Long): void
++установитьВремяОтправления(времяОтправления: Long): void
+_+проверитьРасписание(расписание: Расписание): Boolean_</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1008</x>
+      <y>483</y>
+      <w>147</w>
+      <h>28</h>
+    </coordinates>
+    <panel_attributes>/Абстрактный класс/
+Элемент топологии
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>1008</x>
+      <y>546</y>
+      <w>147</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Связь
+--
+-первыйБлок: Блок
+-второйБлок: Блок
+--
++получитьПервыйБлок(): Блок
++получитьВторойБлок(): Блок
+</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>28</x>
+      <y>588</y>
+      <w>385</w>
+      <h>91</h>
+    </coordinates>
+    <panel_attributes>График
+--
+-события: List&lt;Событие&gt;
+-запросыНаПрокладку: List&lt;Запрос на прокладку&gt;
+--
++получитьСобытия(): List&lt;Событие&gt;
+_+построитьГрафик(расписания: List&lt;Расписание&gt;, топология: Топология): График_
+-создатьЗапосыНаПрокладку(): List&lt;Заапрос на прокладку&gt;
+-разместитьПоезд(запросНаПрокладку: Запрос на прокладку): Boolean</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>665</x>
+      <y>427</y>
+      <w>301</w>
+      <h>280</h>
+    </coordinates>
+    <panel_attributes>Блок-участок
+--
+-ид: Integer
+-название: String
+-длина: Integer
+-станция: Станция
+-путь: Путь
+-верхниеБлоки: List&lt;Блок-участок&gt;
+-нижниеБлоки: List&lt;Блок-участок&gt;
+-естьПлатформа: Boolean
+-номерПлатформы: Integer
+--
++получитьИд(): Integer
++получитьНазвание(): String
++получитьДлину(): Integer
++получитьСтанцию(): Станция
++получитьПуть(): Путь
++получитьВерхниеБлоки(): List&lt;Блок-участок&gt;
++получитьНижниеБлоки(): List&lt;Блок-участок&gt;
++сПлатформой(): Boolean
++получитьНомерПлатформы(): Integer
++установитьНазвание(название: Integer): void
++установитьДлину(длина: Integer): void
++установитьПуть(путь: Путь): void
++сПлатформой(естьПлатформа: Boolean): void
++установитьНомерПлатформы(номерПлатфромы: Integer): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>910</x>
+      <y>329</y>
+      <w>245</w>
+      <h>70</h>
+    </coordinates>
+    <panel_attributes>Топология
+--
+-блоки: List&lt;Блок-участок&gt;
+--
++получитьБлоки(): List&lt;Блок-участок&gt;
+-сохранить(элемент: Элемент топологии): void
++проверить(элемент: Элемент топологии): Integer</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>357</y>
+      <w>21</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>763</x>
+      <y>392</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;50.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>504</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>959</x>
+      <y>490</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;&lt;-</panel_attributes>
+    <additional_attributes>70.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>532</y>
+      <w>56</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>490</x>
+      <y>476</y>
+      <w>21</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;50.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>1071</x>
+      <y>392</y>
+      <w>21</w>
+      <h>105</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;130.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>959</x>
+      <y>560</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>959</x>
+      <y>574</y>
+      <w>63</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;70.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>700</x>
+      <y>238</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>119</x>
+      <y>224</y>
+      <w>182</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>Событие
+--
+-тип: Тип события
+-поезд: Поезд
+-время: Long
+-блок: Блок-участок
+--
++получитьТип(): Тип события
++получитьПоезд(): Поезд
++получитьВремя(): Long
++получитьБлок(): Блок-участок
++установитьВремя(время: Long): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>28</x>
+      <y>490</y>
+      <w>175</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>Запрос на прокладку
+--
+-расписание: Расписание
+-маршруты: List&lt;Маршрут&gt;
+--
++получитьРасписание(): Расписание</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>140</x>
+      <y>119</y>
+      <w>147</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>/Перечисление/
+Тип события
+--
+-название: String
+--
++получитьНазвание(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>329</x>
+      <y>70</y>
+      <w>301</w>
+      <h>196</h>
+    </coordinates>
+    <panel_attributes>Поезд
+--
+-номер: Integer
+-типПоезда: Тип поезда
+-длина: Integer
+-городОтправления: Город
+-городПрибытия: Город
+--
++получитьНомерПоезда(): Integer
++получитьТипПоезда(): Тип поезда
++получитьДлинуПоезда(): Integer
++получитьГородОтправления(): Город
++получитьГородПрибытия(): Город
++установитьНомерПоезда(номерПоезда: Integer): void
++установитьТипПоезда(типПоезда: Тип поезда): void
++установитьДлинуПоезда(длинаПоезда: Integer): void
++установитьГородОтправления(городОтправления: Город): void
++установитьГородПрибытия(городПрибытия: Город): void</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>532</x>
+      <y>259</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>210</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>224</y>
+      <w>77</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>90.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>112</y>
+      <w>56</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>623</x>
+      <y>357</y>
+      <w>56</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>203</x>
+      <y>175</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>294</x>
+      <y>238</y>
+      <w>49</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>50.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>28</x>
+      <y>399</y>
+      <w>147</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>Маршрут
+--
+-блоки: List&lt;Блок-участок&gt;
+--
++получитьНазвание(): String</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>266</x>
+      <y>343</y>
+      <w>21</w>
+      <h>259</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;350.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>441</y>
+      <w>21</w>
+      <h>63</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;70.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>84</x>
+      <y>546</y>
+      <w>21</w>
+      <h>56</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;60.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>357</x>
+      <y>476</y>
+      <w>21</w>
+      <h>126</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;10.0;10.0;160.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>0</x>
+      <y>273</y>
+      <w>679</w>
+      <h>434</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>950.0;600.0;10.0;600.0;10.0;10.0;170.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>868</x>
+      <y>364</y>
+      <w>56</w>
+      <h>21</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>60.0;10.0;10.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>357</x>
+      <y>364</y>
+      <w>847</w>
+      <h>378</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>1140.0;10.0;1190.0;10.0;1190.0;520.0;10.0;520.0;10.0;450.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>959</x>
+      <y>392</y>
+      <w>56</w>
+      <h>84</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;100.0;60.0;100.0;60.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>UMLClass</id>
+    <coordinates>
+      <x>966</x>
+      <y>161</y>
+      <w>154</w>
+      <h>49</h>
+    </coordinates>
+    <panel_attributes>Планировщик
+--
+-станция: Станция
+--
++получитьГрафик(): График</panel_attributes>
+    <additional_attributes/>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>322</x>
+      <y>182</y>
+      <w>896</w>
+      <h>574</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;710.0;10.0;800.0;1260.0;800.0;1260.0;10.0;1140.0;10.0</additional_attributes>
+  </element>
+  <element>
+    <id>Relation</id>
+    <coordinates>
+      <x>868</x>
+      <y>203</y>
+      <w>189</w>
+      <h>119</h>
+    </coordinates>
+    <panel_attributes>lt=&lt;-</panel_attributes>
+    <additional_attributes>10.0;150.0;250.0;150.0;250.0;10.0</additional_attributes>
+  </element>
+</diagram>

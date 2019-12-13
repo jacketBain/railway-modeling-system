@@ -61,7 +61,7 @@ public class Block {
     @Setter
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-            name = "Block_Block",
+            name = "Link",
             joinColumns = {@JoinColumn(name = "block_first")},
             inverseJoinColumns = {@JoinColumn(name = "block_second")},
             foreignKey = @ForeignKey(name = "FK_FirstBlock"),

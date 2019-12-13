@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 import java.util.Collection;
 
 @Entity
-@Table(name = "users", schema = "public")
+@Table(name = "user", schema = "public")
 public class User {
     @Id
     @Getter
@@ -18,7 +18,6 @@ public class User {
     @NotNull
     @Size(min = 3, max = 30)
     private String username;
-
 
     @Getter
     @Setter
