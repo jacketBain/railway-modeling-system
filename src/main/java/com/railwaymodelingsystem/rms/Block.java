@@ -1,48 +1,35 @@
 package com.railwaymodelingsystem.rms;
 
 import com.sun.istack.Nullable;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @ToString
-@AllArgsConstructor
-public class Block extends TopologyElement {
+public class Block {
 
     @NotNull
     @Getter
-    private Integer id;
-
-    @NotNull
-    @Getter
-    @Setter
     private String name;
 
     @NotNull
     @Getter
-    @Setter
     private Integer length;
 
     @NotNull
     @Getter
-    private Station station;
-
-    @NotNull
-    @Getter
-    @Setter
     private Way way;
 
     @NotNull
     @Getter
-    private List<Block> upperBlocks;
+    private List<Block> upperBlocks = new ArrayList<>();
 
     @NotNull
     @Getter
-    private List<Block> downBlocks;
+    private List<Block> downBlocks = new ArrayList<>();
 
     @NotNull
     @Getter
@@ -52,16 +39,23 @@ public class Block extends TopologyElement {
     @Getter
     private Integer platformNumber;
 
-    public void setHasPlatform (Boolean hasPlatform) {
-        this.hasPlatform = hasPlatform;
-        this.platformNumber = null;
+    public Block(String name, Integer length, Way way) {
+        this.name = name;
+        this.length = length;
+        this.way = way;
+        this.hasPlatform = false;
     }
 
-    public void setPlatformNumber(Integer platformNumber) {
-        if (hasPlatform) {
-            this.platformNumber = platformNumber;
-        } else {
-            throw new IllegalStateException("У блок-участка " + toString() + "нет платформы");
-        }
+    public Block(String name, Integer length, Way way, Integer platformNumber) {
+        this.name = name;
+        this.length = length;
+        this.way = way;
+        this.hasPlatform = true;
+        this.platformNumber = platformNumber;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

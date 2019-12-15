@@ -11,4 +11,9 @@ public class City {
     @NotNull
     @Getter
     private String name;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

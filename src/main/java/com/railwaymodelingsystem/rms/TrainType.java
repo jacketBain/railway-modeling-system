@@ -1,6 +1,5 @@
 package com.railwaymodelingsystem.rms;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 public enum TrainType {
@@ -22,5 +21,10 @@ public enum TrainType {
         this.name = name;
         this.minLength = minLength;
         this.maxLength = maxLength;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

@@ -16,7 +16,7 @@ public class Station implements Serializable {
     @Getter
     @NotNull
     @Column(name = "station_id")
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Getter
@@ -29,8 +29,15 @@ public class Station implements Serializable {
     @Setter
     @NotNull
     @ManyToOne(optional = false)
-    @JoinColumn(name="user_login", nullable = false, foreignKey = @ForeignKey(name = "FK_Login"))
+    @JoinColumn(name="station_user_login", nullable = false, foreignKey = @ForeignKey(name = "FK_Login"))
     private User user;
+
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne(optional = false)
+    @JoinColumn(name="station_city", nullable = false, foreignKey = @ForeignKey(name = "FK_StationCity"))
+    private City city;
 
     @Getter
     @Setter
