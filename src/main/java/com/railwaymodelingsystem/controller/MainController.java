@@ -17,8 +17,14 @@ public class MainController {
     }
 
     @GetMapping("/")
-    public String loginPage(){
-        return "login";
+    public String loginPage(Model model, Principal principal){
+        if(principal == null)
+            return "login";
+        else{
+            model.addAttribute("user", principal.getName());
+            return "home";
+        }
+
     }
 
     @GetMapping("/home")

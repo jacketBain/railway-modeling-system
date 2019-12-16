@@ -2,18 +2,15 @@ package com.railwaymodelingsystem.controller;
 
 import com.railwaymodelingsystem.model.AjaxResponseBody;
 import com.railwaymodelingsystem.model.User;
-import com.railwaymodelingsystem.model.rms.Block;
 import com.railwaymodelingsystem.model.rms.Station;
 import com.railwaymodelingsystem.service.StationService;
 import com.railwaymodelingsystem.service.UserService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collection;
 
 @Controller
 public class ConstructorController {
@@ -43,7 +40,7 @@ public class ConstructorController {
         User user = userService.getByName(principal.getName());
 
         station.setName(name);
-       station.setUser(user);
+        station.setUser(user);
 
        user.getStations().add(station);
 
@@ -53,13 +50,17 @@ public class ConstructorController {
     }
 
     @GetMapping("/constructor")
-    public String startConstructor(@RequestParam(name = "station", required = false)String name, Model model)
+    public String startConstructor()
     {
-        if(name == null) {
-        }
-        else{
-            model.addAttribute("stationName", name);
-        }
         return "constructor";
+    }
+
+    @RequestMapping(value = "/constructor/stations/", method = RequestMethod.GET)
+    public Object getStationByName(@RequestParam("name") String name){
+        Station station = stationService.getStationByName(name);
+        if(station == null)
+            return ResponseEntity.notFound();
+        else
+            return ResponseEntity.ok(station);
     }
 }

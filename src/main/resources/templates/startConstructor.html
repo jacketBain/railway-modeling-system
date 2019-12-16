@@ -64,7 +64,7 @@
         <div class="list-group">
             <a data-toggle="modal" data-target="#createStationModal" class="list-group-item list-group-item-primary list-group-item-action">Создать новую...</a>
             <div th:if="${!stations.isEmpty()}" th:each="station : ${stations}">
-                <a class="list-group-item list-group-item-action" th:text="${station.getName()}"></a>
+                <a class="list-group-item list-group-item-action" th:text="${station.getName()}" th:data-longDescription="${station.getName()}" onclick="openStation(this.getAttribute('data-longDescription'));"></a>
             </div>
         </div>
     </div>

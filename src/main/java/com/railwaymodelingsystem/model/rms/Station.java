@@ -1,5 +1,6 @@
 package com.railwaymodelingsystem.model.rms;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.railwaymodelingsystem.model.User;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,12 +29,13 @@ public class Station implements Serializable {
     @Getter
     @Setter
     @NotNull
+    @JsonIgnore
     @ManyToOne(optional = false)
     @JoinColumn(name="user_login", nullable = false, foreignKey = @ForeignKey(name = "FK_Login"))
     private User user;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Block> blocks;
 }

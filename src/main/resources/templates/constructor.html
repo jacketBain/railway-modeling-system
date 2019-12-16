@@ -1,9 +1,6 @@
 <!doctype html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <div th:if="${stationName != null}">
-        <div id="stationNameVal" th:name="${stationName}" style="display: none"></div>
-    </div>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Конструктор топологии</title>
@@ -16,7 +13,6 @@
         </a>
         <img src="img/road.png" alt="">
     </nav>
-	
 </head>
 <body>
 <div class="container-fluid">
@@ -27,7 +23,72 @@
             </canvas>
         </div>
         <div class="col-md-4">
-            Тут панель инструментов
+
+            <div class="row">
+                <button class="btn btn-secondary dropdown-toggle flex-fill mt-2" type="button" id="addWayDropDownButtom" aria-haspopup="true" onclick="showAddWay()" aria-expanded="false">
+                    Путь
+                </button>
+            </div>
+
+            <div class="row pr-2">
+                <div id="addWay" class="flex-fill bg-light mt-2 border-dark" style="display: none">
+                    <div class="form-group pl-2 pr-2 border-dark">
+                        <label for="inputWayNumber" class="font-italic font-weight-bold">Номер пути:</label>
+                        <input name="wayNumber" type="number" id="inputWayNumber" class="form-control mb-2" min="1" required autofocus>
+                    </div>
+
+                    <div class="form-group pl-2 pr-2">
+                        <label for="inputWayLength" class="font-italic font-weight-bold">Длина пути:</label>
+                        <input name="wayLength" type="number" id="inputWayLength" class="form-control mb-2" required>
+                    </div>
+
+                    <div class="form-group pl-2 flex-column">
+                        <input name="hasPlatform" type="checkbox" class="form-check-input m-2" id="inputHasPlatform">
+                        <label class="form-check-label pl-5 font-italic font-weight-bold" for="inputHasPlatform">С платформой</label>
+                    </div>
+
+                    <div class="form-group pl-2 flex-column text-center">
+                        <button id="addWayButton" class="btn btn-primary align-self-center">Добавить</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <button class="btn btn-secondary dropdown-toggle flex-fill mt-2" type="button" id="addArrowDropDownButton" aria-haspopup="true" onclick="showAddArrow()" aria-expanded="false">
+                    Стрелка
+                </button>
+            </div>
+
+            <div class="row pr-2">
+                <div id="addArrow" class="flex-fill bg-light mt-2 border-dark" style="display: none">
+                    <div class="form-group pl-2 pr-2 border-dark">
+                        <label for="selectFirstWay" class="font-italic font-weight-bold">Первый путь:</label>
+                        <select class="form-control" id="selectFirstWay">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group pl-2 pr-2">
+                        <label for="selectSecondWay" class="font-italic font-weight-bold">Вотрой путь:</label>
+                        <select class="form-control" id="selectSecondWay">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group pl-2 flex-column text-center">
+                        <button id="addArrowButton" class="btn btn-primary align-self-center">Добавить</button>
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
 </div>

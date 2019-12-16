@@ -1,15 +1,43 @@
+let addWay = document.getElementById('addWay');
+let addArrow = document.getElementById('addArrow');
+
 let blocksList = {};
-let stationName = document.getElementById("stationNameVal").getAttribute("name").value;
+
+let isOpenedAddWay;
+let isOpenedAddArrow;
+
+function drawTopology(data){
+
+}
+
+function showAddWay(){
+    if(isOpenedAddWay === 0){
+        addWay.style.display = 'block';
+        isOpenedAddWay = 1;
+    }
+    else{
+        addWay.style.display = 'none';
+        isOpenedAddWay = 0;
+    }
+}
+
+function showAddArrow(){
+    if(isOpenedAddArrow === 0){
+        addArrow.style.display = 'block';
+        isOpenedAddArrow = 1;
+    }
+    else{
+        addArrow.style.display = 'none';
+        isOpenedAddArrow = 0;
+    }
+}
 
 $(document).ready(function () {
     $.get(
-        "/constructor",
-        {'name' : stationName },
+        "/constructor/stations/",
+        {'name': 'Samara'},
         function (data) {
-            for (let i = 0; i < data.length(); i++) {
-                alert(data[i]);
-                blocksList.add(data[i]);
-            }
+            drawTopology(data);
         }
     )
 });

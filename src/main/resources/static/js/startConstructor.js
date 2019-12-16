@@ -1,6 +1,5 @@
 var stationName = document.getElementById("inputStationName");
 var error = document.getElementById("stationNameError");
-var enableCreate;
 
 function checkStation(){
     $.get(
@@ -25,17 +24,19 @@ function checkStation(){
 }
 
 function createStation(){
-    if(enableCreate === true) {
-        $.post(
-            "/startConstructor",
-            {'name': stationName.value},
-            function (data) {
-                if (data.status === "SUCCESS") {
-                   document.location.replace("/constructor?station=" + stationName.value);
-                }
+    $.post(
+        "/startConstructor",
+        {'name': stationName.value},
+        function (data) {
+            if (data.status === "SUCCESS") {
+                document.location.replace("/constructor");
             }
-        );
-    }
+        }
+    );
+}
+
+function openStation(name){
+
 }
 
 stationName.addEventListener("input", function () {
