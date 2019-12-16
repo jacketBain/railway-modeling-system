@@ -1,10 +1,11 @@
 var stationName = document.getElementById("inputStationName");
+var stationCity = document.getElementById("inputStationCity");
 var error = document.getElementById("stationNameError");
 
 function checkStation(){
     $.get(
       "/startConstructor/checkName",
-        {'name' : stationName.value },
+        {'name' : stationName.value},
         function (data) {
           if(data.status === "SUCCESS"){
               error.innerHTML = "";
@@ -26,7 +27,8 @@ function checkStation(){
 function createStation(){
     $.post(
         "/startConstructor",
-        {'name': stationName.value},
+        {'name': stationName.value,
+            'city': stationCity.value},
         function (data) {
             if (data.status === "SUCCESS") {
                 document.location.replace("/constructor");

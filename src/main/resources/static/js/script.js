@@ -1,0 +1,2 @@
+var stationNameGlobal;
+var sheduleNameGlobal;

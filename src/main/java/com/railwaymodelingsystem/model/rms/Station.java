@@ -17,7 +17,7 @@ public class Station implements Serializable {
     @Getter
     @NotNull
     @Column(name = "station_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
     @Getter
@@ -36,8 +36,8 @@ public class Station implements Serializable {
 
     @Getter
     @Setter
-    @NotNull
-    @ManyToOne(optional = false)
+//    @NotNull
+    @ManyToOne(optional = true)
     @JoinColumn(name="station_city", nullable = false, foreignKey = @ForeignKey(name = "FK_StationCity"))
     private City city;
 
@@ -45,4 +45,9 @@ public class Station implements Serializable {
     @Setter
     @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Collection<Block> blocks;
+//
+//    @Getter
+//    @Setter
+//    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    private Collection<Shedule> shedules;
 }

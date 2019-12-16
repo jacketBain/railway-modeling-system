@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Менеджер расписаний</title>
+    <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/home" >
+            <img src="img/back.png" alt="" width="48" hight="48">
+            Менеджер расписаний
+        </a>
+        <img src="img/table.png" alt="" width="48" hight="48">
+
+    </nav>
+</head>
+<body>
+
+<div class="tab-pane fade show active" id="nav-books" role="tabpanel" aria-labelledby="nav-books-tab">
+    <table class="table table-secondary">
+        <thead>
+        <tr>
+            <th scope="col">Номер поезда</th>
+            <th scope="col">Платформа</th>
+            <th scope="col">Путь</th>
+            <th scope="col">Тип</th>
+            <th scope="col">Длинна</th>
+            <th scope="col">Время прибытия<th>
+            <th scope="col">Время отправления</th>
+            <th scope="col">Маршрут следования</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each ="train : ${}">
+               <td scope="row" th:utext="${man.getId()}"></td>
+               <td scope="row" th:utext="${man.getName()}"></td>
+               <td scope="row" th:utext="${man.getCountry()}"></td>
+               <td scope="row" th:utext="${man.getWeb_page()}"></td>
+
+           </tr>
+        </tbody>
+    </table>
+</div>
+<div class="btn-group" role="group" aria-label="Basic example">
+    <button type="button" class="btn btn-secondary">Добавить</button>
+    <button type="button" class="btn btn-secondary">Удалить</button>
+</div>
+
+<script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
+<script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/shedule.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -7,7 +7,12 @@ let isOpenedAddWay;
 let isOpenedAddArrow;
 
 function drawTopology(data){
+    if(data == null){
 
+    }
+    else{
+
+    }
 }
 
 function showAddWay(){
@@ -37,7 +42,7 @@ $(document).ready(function () {
         "/constructor/stations/",
         {'name': 'Samara'},
         function (data) {
-            drawTopology(data);
+                drawTopology(data);
         }
     )
 });
