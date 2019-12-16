@@ -26,12 +26,6 @@ public class TrainType implements Serializable {
 
     @Getter
     @Setter
-    @NotNull
-    @Column(name = "min_length", nullable = false)
-    private Integer minLength;
-
-    @Getter
-    @Setter
     @OneToMany(mappedBy = "trainType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Collection<Shedule> shedules;
 }

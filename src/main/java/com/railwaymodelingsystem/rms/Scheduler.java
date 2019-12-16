@@ -1,6 +1,7 @@
 package com.railwaymodelingsystem.rms;
 
 import com.railwaymodelingsystem.rms.RMSException.ScheduleException;
+import com.railwaymodelingsystem.rms.RMSException.SheduleException;
 import com.railwaymodelingsystem.rms.RMSException.StationException;
 import com.railwaymodelingsystem.rms.RMSException.TopologyException;
 
@@ -18,7 +19,7 @@ public class Scheduler {
         try {
             station = createStation();
         } catch (Exception e) {
-            System.out.println("Creating station error: " + e.getMessage() + "\n");
+            System.out.println("[ERROR]Creating station error: " + e.getMessage() + "\n");
             e.printStackTrace();
         }
 
@@ -27,13 +28,13 @@ public class Scheduler {
             try {
                 schedule = getSchedule();
             } catch (ScheduleException e) {
-                System.out.println("Build schedule exception: " + e.getMessage() + "\n");
+                System.out.println("[ERROR]Build schedule exception: " + e.getMessage() + "\n");
                 e.printStackTrace();
             }
         }
 
         if (schedule != null) {
-            System.out.println("[INFO] Получен график движения поездов на станции " + station + ":\n" + schedule);
+            System.out.println("[SUCCESS] Получен график движения поездов на станции " + station + ":\n" + schedule);
             System.out.println("\nСписок событий:");
             schedule.printEvents();
         }
@@ -87,7 +88,6 @@ public class Scheduler {
         Train train6 = new Train(1006, TrainType.SAPSAN, 10, cityTo, cityFrom);
         Train train8 = new Train(1008, TrainType.SUBURBAN, 5, cityTo, cityFrom);
 
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
         Long arriveTime1 = dateFormat.parse("00:10:00").getTime();
@@ -114,5 +114,87 @@ public class Scheduler {
                                                                 shedule5, shedule6, shedule7, shedule8));
 
         return Station.create("Казань", cityStation, topology, shedules);
+    }
+
+    public static void buildStation(
+            List<com.railwaymodelingsystem.model.rms.Way> ways,
+            List<com.railwaymodelingsystem.model.rms.Shedule> shedules,
+            com.railwaymodelingsystem.model.rms.Station station
+                                    ) throws SheduleException, TopologyException, StationException {
+        //создание блоков
+        List<Way> newWays = new ArrayList<>();
+        List<Block> newBlocks = new ArrayList<>();
+        Map<com.railwaymodelingsystem.model.rms.Way,Way> wayNewWayMap = new HashMap<>();
+        Map<com.railwaymodelingsystem.model.rms.Block, Block> blockNewBlockMap = new HashMap<>();
+        for (com.railwaymodelingsystem.model.rms.Way way : ways) {
+            Way newWay = new Way(way.getNumber());
+            newWays.add(newWay);
+            wayNewWayMap.put(way, newWay);
+            for (com.railwaymodelingsystem.model.rms.Block block : way.getBlocks()) {
+                Block newBlock;
+                if (block.getHasPlatform()) {
+                    newBlock = new Block(block.getName(), block.getLength(), newWay, block.getPlatformNumber());
+                } else {
+                    newBlock = new Block(block.getName(), block.getLength(), newWay);
+                }
+                newBlocks.add(newBlock);
+                blockNewBlockMap.put(block, newBlock);
+            }
+        }
+        //Связывание блоков
+        for (Map.Entry<com.railwaymodelingsystem.model.rms.Block, Block> blockNewBlockEntry : blockNewBlockMap.entrySet()) {
+            com.railwaymodelingsystem.model.rms.Block block = blockNewBlockEntry.getKey();
+            Block newDownBlock = blockNewBlockEntry.getValue();
+            for (com.railwaymodelingsystem.model.rms.Block upperBlock : block.getBlocks()) {
+                Block newUpperBlock = blockNewBlockMap.get(upperBlock);
+                if (newDownBlock == newUpperBlock) {
+                    throw new SheduleException("Блок " + newDownBlock + " связан сам с собой");
+                }
+                newDownBlock.getUpperBlocks().add(newUpperBlock);
+                newUpperBlock.getDownBlocks().add(newDownBlock);
+            }
+        }
+        for (Block newBlock : newBlocks) {
+            if (newBlock.getDownBlocks().size() == 0 && newBlock.getUpperBlocks().size() == 0) {
+                throw new SheduleException("Блок " + newBlock + " не связан с другими");
+            }
+        }
+        //Создание поездов и расписаний
+        List<Shedule> newShedules = new ArrayList<>();
+        Map<com.railwaymodelingsystem.model.rms.City,City> cityNewCityMap = new HashMap<>();
+        for (com.railwaymodelingsystem.model.rms.Shedule shedule : shedules) {
+            City cityFrom;
+            City cityTo;
+            if (cityNewCityMap.containsKey(shedule.getCityFrom())) {
+                cityFrom = cityNewCityMap.get(shedule.getCityFrom());
+            } else {
+                cityFrom = new City(shedule.getCityFrom().getName());
+                cityNewCityMap.put(shedule.getCityFrom(), cityFrom);
+            }
+            if (cityNewCityMap.containsKey(shedule.getCityTo())) {
+                cityTo = cityNewCityMap.get(shedule.getCityTo());
+            } else {
+                cityTo = new City(shedule.getCityTo().getName());
+                cityNewCityMap.put(shedule.getCityTo(), cityTo);
+            }
+            Train train = new Train(
+                    shedule.getKey().getTrainNumber(),
+                    TrainType.fromType(shedule.getTrainType()),
+                    shedule.getTrainLength(),
+                    cityFrom, cityTo
+                    );
+            Shedule newShedule = new Shedule(train, wayNewWayMap.get(shedule.getWay()),
+                    shedule.getArriveTime().getTime(), shedule.getDepartureTime().getTime());
+            newShedules.add(newShedule);
+        }
+        //Создание топологии и станции
+        Topology topology = Topology.create(newWays, newBlocks);
+        City stationCity;
+        if (cityNewCityMap.containsKey(station.getCity())) {
+            stationCity = cityNewCityMap.get(station.getCity());
+        } else {
+            stationCity = new City(station.getCity().getName());
+        }
+        Scheduler.station = Station.create(station.getName(), stationCity,topology, newShedules);
     }
 }

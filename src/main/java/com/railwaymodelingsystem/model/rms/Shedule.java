@@ -34,14 +34,14 @@ public class Shedule implements Serializable {
 
     @Getter
     @Setter
-    @Nullable
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "shedule_arrive_time")
     private Date arriveTime;
 
     @Getter
     @Setter
-    @Nullable
+    @NotNull
     @Temporal(TemporalType.DATE)
     @Column(name = "shedule_departure_time")
     private Date departureTime;

@@ -18,7 +18,7 @@ public class ShedulePrimary implements Serializable {
     @Getter
     @Setter
     @Column(name = "train_number")
-    private Integer number;
+    private Integer trainNumber;
 
     @Getter
     @Setter

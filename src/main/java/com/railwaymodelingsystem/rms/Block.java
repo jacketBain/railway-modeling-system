@@ -5,10 +5,8 @@ import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-@ToString
 public class Block {
 
     @NotNull
@@ -39,14 +37,14 @@ public class Block {
     @Getter
     private Integer platformNumber;
 
-    public Block(String name, Integer length, Way way) {
+    public Block(@NotNull String name, @NotNull Integer length, @NotNull Way way) {
         this.name = name;
         this.length = length;
         this.way = way;
         this.hasPlatform = false;
     }
 
-    public Block(String name, Integer length, Way way, Integer platformNumber) {
+    public Block(@NotNull String name, @NotNull Integer length, @NotNull Way way, @NotNull Integer platformNumber) {
         this.name = name;
         this.length = length;
         this.way = way;
