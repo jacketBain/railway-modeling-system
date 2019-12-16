@@ -31,6 +31,8 @@ function createStation(){
             'city': stationCity.value},
         function (data) {
             if (data.status === "SUCCESS") {
+                localStorage.clear();
+                localStorage.setItem("stationName", data.message);
                 document.location.replace("/constructor");
             }
         }
@@ -38,7 +40,8 @@ function createStation(){
 }
 
 function openStation(name){
-
+    localStorage.setItem("stationName",name);
+    document.location.replace("/constructor");
 }
 
 stationName.addEventListener("input", function () {

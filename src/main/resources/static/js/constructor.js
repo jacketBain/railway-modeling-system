@@ -40,7 +40,7 @@ function showAddArrow(){
 $(document).ready(function () {
     $.get(
         "/constructor/stations/",
-        {'name': 'Samara'},
+        {'name':localStorage.getItem("stationName")},
         function (data) {
                 drawTopology(data);
         }

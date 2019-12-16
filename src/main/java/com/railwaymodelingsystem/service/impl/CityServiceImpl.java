@@ -6,6 +6,8 @@ import com.railwaymodelingsystem.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class CityServiceImpl implements CityService {
     @Autowired
@@ -14,5 +16,10 @@ public class CityServiceImpl implements CityService {
     @Override
     public City getCityByName(String name) {
         return cityRepository.getByName(name);
+    }
+
+    @Override
+    public List<City> getAllCity() {
+        return cityRepository.findAll();
     }
 }

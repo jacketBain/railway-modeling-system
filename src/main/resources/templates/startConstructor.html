@@ -44,7 +44,12 @@
                         <span class="input-group-text" id="inputName">Имя станции</span>
                     </div>
                     <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
-                    <input id="inputStationCity" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
+                    <label for="citySelect">Город:</label>
+                    <select class="form-control" id="citySelect">
+                        <div th:each="city : ${cityList}">
+                        <option th:utext="${city.getName()}"></option>
+                        </div>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">

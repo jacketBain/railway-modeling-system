@@ -18,6 +18,8 @@ import java.security.Principal;
 
 @Controller
 public class ConstructorController {
+    private static String currentStation;
+
     @Autowired
     CityService cityService;
 
@@ -68,7 +70,7 @@ public class ConstructorController {
         if(station == null)
             return ResponseEntity.ok(null);
         else {
-            
+
             return ResponseEntity.ok(station);
         }
     }
