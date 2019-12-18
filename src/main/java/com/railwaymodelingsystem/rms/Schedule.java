@@ -22,7 +22,7 @@ public class Schedule {
 
     private Schedule() { }
 
-    public static Schedule buildSchedule(@NotNull Station station) throws ScheduleException {
+    public static Schedule buildTestSchedule(@NotNull Station station) throws ScheduleException {
         Schedule schedule = new Schedule();
         schedule.station = station;
         schedule.claims = schedule.createClaims();

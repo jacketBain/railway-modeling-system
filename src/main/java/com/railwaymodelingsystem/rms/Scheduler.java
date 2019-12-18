@@ -42,7 +42,7 @@ public class Scheduler {
 
     public static Schedule getSchedule() throws ScheduleException {
         if (station != null) {
-            return Schedule.buildSchedule(station);
+            return Schedule.buildTestSchedule(station);
         } else {
             throw new ScheduleException("Станция не создана");
         }
