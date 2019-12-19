@@ -19,11 +19,9 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
-            <canvas id="canvas">
-
-            </canvas>
+            <canvas id="canvas"></canvas>
         </div>
-        <div class="col-md-4">
+        <div id="instruments" class="col-md-4">
             <div class="row flex-column pb-2 pt-2">
                 <button class="btn btn-secondary dropdown-toggle flex-column" type="button" aria-haspopup="true" aria-expanded="false" onclick="showAddWay()">
                     Путь
@@ -36,54 +34,69 @@
                         <input type="number" class="form-control pr-2" id="inputWayNumber" min="1" max="15">
                     </div>
 
-                    <div class="form-group pr-4 pl-4">
-                        <label for="inputWayLength">Длина</label>
-                        <input type="number" class="form-control pr-2" id="inputWayLength">
+                    <div class="form-group pr-4 pl-4 text-center">
+                        <button type="button" class="btn btn-secondary" onclick="addWay()">Добавить</button>
                     </div>
+                </div>
+            </div>
+
+
+            <div class="row flex-column pb-2 pt-2">
+                <button class="btn btn-secondary dropdown-toggle flex-column" type="button" aria-haspopup="true" aria-expanded="false" onclick="showAddWay()">
+                    Блок-участок
+                </button>
+            </div>
+            <div class="row flex-column bg-light" >
+                <div id="addBlock" class="row flex-column">
+                    <div class="form-group pr-4 pl-4">
+                        <label for="inputBlockName">Имя блок-участка</label>
+                        <input type="text" class="form-control pr-2" id="inputBlockName" pattern="/^[а-яА-я0-9a-zA-z]*$/">
+                    </div>
+                    <div class="form-group pr-4 pl-4">
+                        <label for="inputBlockLength">Длина</label>
+                        <input type="number" class="form-control pr-2" id="inputBlockLength" min="1" max="70">
+                    </div>
+                    <div class="form-group pr-4 pl-4">
+                        <label for="inputWay">Путь</label>
+                        <select class="form-control" id="inputWay">
+                            <option>1</option>
+                            <option>2</option>
+                            <option>3</option>
+                            <option>4</option>
+                            <option>5</option>
+                        </select>
+                    </div>
+
                     <div class="form-group form-check pl-5 pr-5">
                         <input type="checkbox" class="form-check-input" id="hasPlatform">
                         <label class="form-check-label" for="hasPlatform">С платформой</label>
                     </div>
+                    <div class="form-group pr-4 pl-4">
+                        <label for="inputPlatformNumber">Номер платформы</label>
+                        <input type="number" class="form-control pr-2" id="inputPlatformNumber" min="1" max="15">
+                    </div>
                     <div class="form-group pr-4 pl-4 text-center">
-                        <button type="button" class="btn btn-secondary ">Добавить</button>
+                        <button type="button" class="btn btn-secondary" onclick="addBlock()">Добавить</button>
                     </div>
                 </div>
             </div>
             <div class="row flex-column pb-2">
                 <button class="btn btn-secondary dropdown-toggle flex-column" type="button" aria-haspopup="true" aria-expanded="false" onclick="showAddArrow()">
-                    Стрелка
+                    Связь
                 </button>
             </div>
             <div class="row flex-column bg-light" >
-
-                <div id="addArrow" class="row flex-column">
-                    <div class="form-group pr-4 pl-4">
-                        <label for="inputFirstWay">1-й путь</label>
-                        <select class="form-control" id="inputFirstWay">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group pr-4 pl-4">
-                        <label for="inputSecondWay">2-й путь</label>
-                        <select class="form-control" id="inputSecondWay">
-                            <option>1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
-                        </select>
-                    </div>
-                    <div class="form-group pr-4 pl-4 text-center">
-                        <button type="button" class="btn btn-secondary ">Добавить</button>
-                    </div>
+                <div class="form-group pr-4 pl-4">
+                    <label for="inputBlockFromName">Имя первого блок-участка</label>
+                    <input type="text" class="form-control pr-2" id="inputBlockFromName">
                 </div>
-            </div>
-            <div class="row flex-column pr-4 pl-4" >
-                <button type="button" class="btn btn-danger btn-lg btn-block">Выйти</button>
+                <div class="form-group pr-4 pl-4">
+                    <label for="inputBlockToName">Имя второго блок-участка</label>
+                    <input type="text" class="form-control pr-2" id="inputBlockToName">
+                </div>
+                <div class="form-group pr-4 pl-4 text-center">
+                    <button type="button" class="btn btn-secondary" onclick="addLink()">Добавить</button>
+                </div>
             </div>
         </div>
     </div>
@@ -93,6 +106,7 @@
 <script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
 <script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
 <script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="webjars/fabric.js/1.4.12/fabric.min.js" crossorigin="anonymous"></script>
 <script src="js/constructor.js"></script>
 
 </body>

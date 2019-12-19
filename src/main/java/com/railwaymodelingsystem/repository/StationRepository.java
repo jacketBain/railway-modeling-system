@@ -8,4 +8,6 @@ public interface StationRepository extends JpaRepository<Station, Integer> {
 
     Boolean existsByNameAndUser(String name, User user);
     Station findByName(String name);
+    Station findByNameAndUser(String name, User user);
+    void deleteByNameAndUser(String name, User user);
 }

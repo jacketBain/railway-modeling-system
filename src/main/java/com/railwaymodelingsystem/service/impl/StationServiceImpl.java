@@ -25,9 +25,12 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public Station getStationByName(String name) {
-        return stationRepository.findByName(name);
+    public Station getStationByNameAndUser(String name, User user) {
+        return stationRepository.findByNameAndUser(name, user);
     }
 
-
+    @Override
+    public void deleteByNameAndUser(String name, User user) {
+        stationRepository.deleteByNameAndUser(name, user);
+    }
 }

@@ -36,18 +36,18 @@ public class Station implements Serializable {
 
     @Getter
     @Setter
-//    @NotNull
+    @NotNull
     @ManyToOne(optional = true)
     @JoinColumn(name="station_city", nullable = false, foreignKey = @ForeignKey(name = "FK_StationCity"))
     private City city;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
     private Collection<Block> blocks;
-//
-//    @Getter
-//    @Setter
-//    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-//    private Collection<Shedule> shedules;
+
+    @Getter
+    @Setter
+    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    private Collection<Shedule> shedules;
 }

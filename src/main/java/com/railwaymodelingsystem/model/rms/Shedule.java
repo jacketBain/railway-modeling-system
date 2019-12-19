@@ -23,12 +23,16 @@ public class Shedule implements Serializable {
     @NotNull
     @MapsId("stationId")
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
-    @JoinColumn(name = "station_id", nullable = false, referencedColumnName = "station_id", foreignKey = @ForeignKey(name = "FK_Station_Id"))
+    @JoinColumn(name = "station_id", nullable = false, referencedColumnName = "station_id", foreignKey = @ForeignKey(name = "FK_StationId"))
     private Station station;
 
     @Getter
     @Setter
-    @NotNull
+    @Column(name = "platform_number")
+    private Integer platformNumber;
+
+    @Getter
+    @Setter
     @Column(name = "shedule_train_length", nullable = false)
     private Integer trainLength;
 
@@ -73,4 +77,8 @@ public class Shedule implements Serializable {
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name = "shedule_way_number", nullable = false, foreignKey = @ForeignKey(name = "FK_SheduleWay"))
     private Way way;
+
+    public String getRoute(){
+        return getCityFrom() + " - " + getCityTo();
+    }
 }

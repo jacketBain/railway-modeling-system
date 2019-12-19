@@ -1,15 +1,21 @@
 package com.railwaymodelingsystem.rms;
 
+import com.railwaymodelingsystem.model.rms.Link;
+import com.railwaymodelingsystem.repository.LinkRepository;
 import com.railwaymodelingsystem.rms.RMSException.ScheduleException;
 import com.railwaymodelingsystem.rms.RMSException.SheduleException;
 import com.railwaymodelingsystem.rms.RMSException.StationException;
 import com.railwaymodelingsystem.rms.RMSException.TopologyException;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class Scheduler {
+
+    @Autowired
+    private static LinkRepository linkRepository;
 
     private static Station station;
 
@@ -145,8 +151,9 @@ public class Scheduler {
         for (Map.Entry<com.railwaymodelingsystem.model.rms.Block, Block> blockNewBlockEntry : blockNewBlockMap.entrySet()) {
             com.railwaymodelingsystem.model.rms.Block block = blockNewBlockEntry.getKey();
             Block newDownBlock = blockNewBlockEntry.getValue();
-            for (com.railwaymodelingsystem.model.rms.Block upperBlock : block.getBlocks()) {
-                Block newUpperBlock = blockNewBlockMap.get(upperBlock);
+            List<Link> links = linkRepository.getLinksByBlockFrom(block);
+            for (com.railwaymodelingsystem.model.rms.Link upperLink : links) {
+                Block newUpperBlock = blockNewBlockMap.get(upperLink.getBlockTo());
                 if (newDownBlock == newUpperBlock) {
                     throw new SheduleException("Блок " + newDownBlock + " связан сам с собой");
                 }

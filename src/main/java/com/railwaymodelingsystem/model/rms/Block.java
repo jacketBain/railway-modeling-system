@@ -13,8 +13,6 @@ import java.util.Collection;
 public class Block {
     @Id
     @Getter
-    @Setter
-    @NotNull
     @Column(name = "block_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -34,7 +32,7 @@ public class Block {
     @Getter
     @Setter
     @NotNull
-    @Column(name = "block_has_platform", nullable = false)
+    @Column(name = "block_has_platform")
     private Boolean hasPlatform;
 
     @Getter
@@ -56,16 +54,4 @@ public class Block {
     @ManyToOne(optional=false, cascade=CascadeType.ALL)
     @JoinColumn(name="block_station", foreignKey = @ForeignKey(name = "FK_BlockStation"))
     private Station station;
-
-    @Getter
-    @Setter
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-            name = "Link",
-            joinColumns = {@JoinColumn(name = "block_first")},
-            inverseJoinColumns = {@JoinColumn(name = "block_second")},
-            foreignKey = @ForeignKey(name = "FK_FirstBlock"),
-            inverseForeignKey = @ForeignKey(name = "FK_SecondBlock")
-    )
-    private Collection<Block> blocks;
 }

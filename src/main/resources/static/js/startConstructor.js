@@ -24,7 +24,7 @@ function checkStation(){
     );
 }
 
-function createStation(){
+function createStation() {
     $.post(
         "/startConstructor",
         {'name': stationName.value,
@@ -39,8 +39,9 @@ function createStation(){
     );
 }
 
-function openStation(name){
-    localStorage.setItem("stationName",name);
+function openStation(name) {
+    localStorage.clear();
+    localStorage.setItem("stationName", name);
     document.location.replace("/constructor");
 }
 
@@ -65,3 +66,17 @@ stationName.addEventListener("input", function () {
         }
     }
 });
+
+
+
+function removeStation(name) {
+    $.post(
+        "/constructor/removeStation",
+        { 'name' : name },
+        function (data) {
+            if (data.status === "SUCCESS") {
+                document.location.replace("/startConstructor");
+            }
+        }
+    );
+}

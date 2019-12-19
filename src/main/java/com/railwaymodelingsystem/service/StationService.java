@@ -6,5 +6,6 @@ import com.railwaymodelingsystem.model.rms.Station;
 public interface StationService {
     Station addStation(Station station);
     Boolean isExists(String station, User user);
-    Station getStationByName(String name);
+    Station getStationByNameAndUser(String name, User user);
+    void deleteByNameAndUser(String name, User user);
 }

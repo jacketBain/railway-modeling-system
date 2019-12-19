@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en"xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Менеджер расписаний</title>
@@ -16,6 +16,38 @@
 </head>
 <body>
 
+<div class="modal fade" id="createTrainModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Создание новой станции</h4>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputName">Имя станции</span>
+                    </div>
+                    <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
+                    <label for="inputStationCity">Город:</label>
+                    <select class="form-control" id="inputStationCity">
+<!--                        <div th:each="city : ${cityList}">-->
+<!--                            <option th:utext="${city.getName()}"></option>-->
+<!--                        </div>-->
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="stationNameError"></div>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                <button type="button" class="btn btn-primary" onclick="createTrain()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="tab-pane fade show active" id="nav-books" role="tabpanel" aria-labelledby="nav-books-tab">
     <table class="table table-secondary">
         <thead>
@@ -31,19 +63,22 @@
 
         </tr>
         </thead>
-        <tbody>
-        <tr th:each ="train : ${}">
-               <td scope="row" th:utext="${man.getId()}"></td>
-               <td scope="row" th:utext="${man.getName()}"></td>
-               <td scope="row" th:utext="${man.getCountry()}"></td>
-               <td scope="row" th:utext="${man.getWeb_page()}"></td>
-
-           </tr>
+        <tbody th:if="${!trains.isEmpty()}">
+            <tr th:each ="train : ${trains}">
+                <td scope="row" th:utext="${train.getKey().getTrainNumber()}"></td>
+                <td scope="row" th:utext="${train.getPlatformNumber()}"></td>
+                <td scope="row" th:utext="${train.getWay().getNumber()}"></td>
+                <td scope="row" th:utext="${train.getTrainType().getName()}"></td>
+                <td scope="row" th:utext="${train.getTrainLength()}"></td>
+                <td scope="row" th:utext="${train.getArriveTime()}"></td>
+                <td scope="row" th:utext="${train.getDepartureTime()}"></td>
+                <td scope="row" th:utext="${train.getRoute()}"></td>
+            </tr>
         </tbody>
     </table>
 </div>
 <div class="btn-group" role="group" aria-label="Basic example">
-    <button type="button" class="btn btn-secondary">Добавить</button>
+    <button  data-toggle="modal" data-target="#createTrainModal" type="button" class="btn btn-secondary">Добавить</button>
     <button type="button" class="btn btn-secondary">Удалить</button>
 </div>
 

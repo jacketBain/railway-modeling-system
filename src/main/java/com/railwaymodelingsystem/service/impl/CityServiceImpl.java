@@ -22,4 +22,9 @@ public class CityServiceImpl implements CityService {
     public List<City> getAllCity() {
         return cityRepository.findAll();
     }
+
+    @Override
+    public City addCity(City city) {
+        return cityRepository.saveAndFlush(city);
+    }
 }

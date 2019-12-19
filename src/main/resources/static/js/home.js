@@ -3,5 +3,5 @@ function openConstructor() {
 }
 
 function openShedule() {
-    window.location.href="/start_shedule";
+    window.location.href="/start_Shedule";
 }

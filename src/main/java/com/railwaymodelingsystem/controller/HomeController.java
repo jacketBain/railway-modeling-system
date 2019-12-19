@@ -29,4 +29,11 @@ public class HomeController {
         model.addAttribute("cityList", cityService.getAllCity());
         return "startConstructor";
     }
+
+    @GetMapping("/start_Shedule")
+    public String startShedule(Model model, Principal principal){
+        User user = userService.getByName(principal.getName());
+        model.addAttribute("stations", user.getStations());
+        return "startShedule";
+    }
 }

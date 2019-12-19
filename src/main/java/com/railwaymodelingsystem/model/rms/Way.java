@@ -2,9 +2,9 @@ package com.railwaymodelingsystem.model.rms;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Collection;
 
@@ -13,10 +13,8 @@ import java.util.Collection;
 public class Way implements Serializable {
     @Id
     @Getter
-    @Setter
-    @NotNull
     @Column(name = "way_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Integer id;
 
     @Getter
@@ -25,6 +23,13 @@ public class Way implements Serializable {
     @Column(name = "way_number", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer number;
+
+    @Getter
+    @Setter
+    @NotNull
+    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @JoinColumn(name = "way_station", nullable = false, referencedColumnName = "station_id", foreignKey = @ForeignKey(name = "FK_WayStationId"))
+    private Station station;
 
     @Getter
     @Setter

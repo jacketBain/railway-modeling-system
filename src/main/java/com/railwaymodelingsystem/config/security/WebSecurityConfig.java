@@ -33,7 +33,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.authorizeRequests().antMatchers("/signup/**", "/login", "/", "/welcome", "/webjars/**", "/css/**", "/img/**", "/js/**").permitAll();
 
-        http.authorizeRequests().anyRequest().access("hasRole('ROLE_USER')");
+        //http.authorizeRequests().anyRequest().access("hasRole('ROLE_USER')");
 
         http.authorizeRequests().and().formLogin()
                 .loginProcessingUrl("/j_spring_security_check")
