@@ -4,10 +4,10 @@ import com.railwaymodelingsystem.rms.RMSException.SheduleException;
 import lombok.Getter;
 
 public enum TrainType {
-    CARGO("Грузовой",10),
-    PASSENGER("Пассажирский", 10),
-    SAPSAN("Сапсан", 10),
-    SUBURBAN("Пригородный",10);
+    CARGO("Грузовой",10, 33),
+    PASSENGER("Пассажирский", 10, 25),
+    SAPSAN("Сапсан", 10, 69),
+    SUBURBAN("Пригородный",10, 27);
 
     @Getter
     private String name;
@@ -15,9 +15,14 @@ public enum TrainType {
     @Getter
     private int maxLength;
 
-    TrainType (String name, Integer maxLength) {
+    //метр в секунду
+    @Getter
+    private int speed;
+
+    TrainType (String name, Integer maxLength, int speed) {
         this.name = name;
         this.maxLength = maxLength;
+        this.speed = speed;
     }
 
     public static TrainType fromType(com.railwaymodelingsystem.model.rms.TrainType trainType) throws SheduleException {

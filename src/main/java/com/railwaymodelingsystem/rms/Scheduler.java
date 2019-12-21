@@ -25,7 +25,7 @@ public class Scheduler {
         try {
             station = createStation();
         } catch (Exception e) {
-            System.out.println("[ERROR]Creating station error: " + e.getMessage() + "\n");
+            System.out.println("[ERROR] Ошибка создания станции:\n" + e.getMessage() + "\n");
             e.printStackTrace();
         }
 
@@ -34,7 +34,7 @@ public class Scheduler {
             try {
                 schedule = getSchedule();
             } catch (ScheduleException e) {
-                System.out.println("[ERROR]Build schedule exception: " + e.getMessage() + "\n");
+                System.out.println("[ERROR] Ошибка построения расписания:\n" + e.getMessage() + "\n");
                 e.printStackTrace();
             }
         }
@@ -48,7 +48,7 @@ public class Scheduler {
 
     public static Schedule getSchedule() throws ScheduleException {
         if (station != null) {
-            return Schedule.buildTestSchedule(station);
+            return Schedule.buildSchedule(station);
         } else {
             throw new ScheduleException("Станция не создана");
         }

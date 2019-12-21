@@ -31,6 +31,6 @@ public class Event {
     public String toString() {
         Locale locale = new Locale("ru", "RU");
         DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
-        return (eventType == EventType.STAY ? "Стоянка на" : eventType.toString()) + " БУ " + block + " в " + dateFormat.format(new Date(time));
+        return (eventType == EventType.STAY ? "Стоянка на" : eventType.toString()) + " " + block + " в " + dateFormat.format(new Date(time));
     }
 }
