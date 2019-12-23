@@ -44,14 +44,14 @@ public class Block {
     @Getter
     @Setter
     @NotNull
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false, cascade=CascadeType.MERGE)
     @JoinColumn(name="block_way", foreignKey = @ForeignKey(name = "FK_BlockWay"))
     private Way way;
 
     @Getter
     @Setter
     @NotNull
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false)
     @JoinColumn(name="block_station", foreignKey = @ForeignKey(name = "FK_BlockStation"))
     private Station station;
 }

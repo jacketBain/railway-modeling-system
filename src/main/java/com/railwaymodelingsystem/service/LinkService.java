@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface LinkService {
     List<Link> getLinksByBlockFrom(Block blockFrom);
-    Boolean getByBlockFromAndAndBlockTo(Block blockFrom, Block blockTo);
-//    Link addLink(Link link);
+    List<Link> getByBlockFromAndBlockTo(Block blockFrom, Block blockTo);
+    List<Link> getByBlockFromOrBlockTo(Block blockFrom, Block blockTo);
+    Link addLink(Link link);
+    void deleteLink(Link link);
 }

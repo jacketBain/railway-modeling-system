@@ -9,4 +9,6 @@ import java.util.List;
 
 public interface SheduleRepository extends JpaRepository<Shedule, ShedulePrimary> {
     List<Shedule> getAllByStation(Station station);
+    List<Shedule> getByKey(ShedulePrimary shedulePrimary);
+    void deleteByKey(ShedulePrimary shedulePrimary);
 }

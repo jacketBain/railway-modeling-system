@@ -23,6 +23,5 @@ public class ShedulePrimary implements Serializable {
     @Getter
     @Setter
     @Column(name = "station_id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer stationId;
 }

@@ -43,11 +43,11 @@ public class Station implements Serializable {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private Collection<Block> blocks;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "station", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "station")
     private Collection<Shedule> shedules;
 }

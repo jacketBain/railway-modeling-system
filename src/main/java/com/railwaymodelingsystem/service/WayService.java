@@ -7,6 +7,8 @@ import java.util.List;
 
 public interface WayService {
     Way addWay(Way way);
-    Way getByWayAndStation(Integer number, Station station);
-    List<Way> getWayByStation(Station station);
+    List<Way> getByWayAndStation(Integer number, Station station);
+    void removeWay(Way way);
+    Way editWay(Way way);
+    List<Way> getByStation(Station station);
 }

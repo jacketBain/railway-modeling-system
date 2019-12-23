@@ -27,18 +27,18 @@ public class Way implements Serializable {
     @Getter
     @Setter
     @NotNull
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false, cascade=CascadeType.MERGE)
     @JoinColumn(name = "way_station", nullable = false, referencedColumnName = "station_id", foreignKey = @ForeignKey(name = "FK_WayStationId"))
     private Station station;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "way", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "way", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Collection<Shedule> shedules;
 
     @Getter
     @Setter
-    @OneToMany(mappedBy = "way", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "way", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Collection<Block> blocks;
 
 }

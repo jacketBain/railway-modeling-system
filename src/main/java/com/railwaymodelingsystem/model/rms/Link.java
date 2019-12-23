@@ -20,7 +20,7 @@ public class Link implements Serializable {
     @Setter
     @NotNull
     @MapsId("link_block_from")
-    @ManyToOne(optional=false, cascade= CascadeType.ALL)
+    @ManyToOne(optional=false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JoinColumn(name = "link_block_from", nullable = false, referencedColumnName = "block_id", foreignKey = @ForeignKey(name = "FK_BlockFrom"))
     private Block blockFrom;
@@ -29,7 +29,7 @@ public class Link implements Serializable {
     @Setter
     @NotNull
     @MapsId("link_block_to")
-    @ManyToOne(optional=false, cascade=CascadeType.ALL)
+    @ManyToOne(optional=false)
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JoinColumn(name = "link_block_to", nullable = false, referencedColumnName = "block_id", foreignKey = @ForeignKey(name = "FK_BlockTo"))
     private Block blockTo;

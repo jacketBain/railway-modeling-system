@@ -11,10 +11,6 @@ import java.util.Map;
 
 public class PlaceAttempt {
 
-    @Getter
-    @Setter
-    private Boolean success = false;
-
     @NotNull
     @Getter
     private Claim claim;

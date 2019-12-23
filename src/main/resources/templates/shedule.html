@@ -23,19 +23,82 @@
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">Создание новой станции</h4>
+                <h4 class="modal-title">Добавление поезда</h4>
             </div>
             <div class="modal-body">
                 <div class="input-group mb-2 mt-2">
                     <div class="input-group-prepend">
-                        <span class="input-group-text" id="inputName">Имя станции</span>
+                        <span class="input-group-text">Номер</span>
                     </div>
-                    <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
-                    <label for="inputStationCity">Город:</label>
-                    <select class="form-control" id="inputStationCity">
-<!--                        <div th:each="city : ${cityList}">-->
-<!--                            <option th:utext="${city.getName()}"></option>-->
-<!--                        </div>-->
+                    <input id="inputTrainNumber" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required autofocus>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Платформа</span>
+                    </div>
+                    <select class="form-control" id="inputPlatform">
+                        <div th:if="${platformList.size() !=0}" th:each="platform : ${platformList}">
+                            <option th:text="${platform.toString()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Путь</span>
+                    </div>
+                    <select class="form-control" id="inputWay">
+                        <div th:if="${wayList.size() != 0}" th:each="way : ${wayList}">
+                            <option th:text="${way.getNumber()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Тип</span>
+                    </div>
+                    <select class="form-control" id="inputType">
+                        <div th:if="${trainTypeList.size() != 0}" th:each="type : ${trainTypeList}">
+                            <option th:text="${type.getName()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Длина</span>
+                    </div>
+                    <input class="form-control" id="inputLength" type="number" min="1" max="71">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Время прибытия</span>
+                    </div>
+                    <input class="form-control" id="inputArriveTime" type="time">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Время оправления</span>
+                    </div>
+                    <input class="form-control" id="inputDepartureTime" type="time">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <span class="card-title">Маршрут следования:</span>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Из</span>
+                    </div>
+                    <select class="form-control" id="inputCityFrom">
+                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
+                            <option th:text="${city.getName()}"></option>
+                        </div>
+                    </select>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">В</span>
+                    </div>
+                    <select class="form-control" id="inputCityTo">
+                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
+                            <option th:text="${city.getName()}"></option>
+                        </div>
                     </select>
                 </div>
             </div>
@@ -43,6 +106,101 @@
                 <div id="stationNameError"></div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
                 <button type="button" class="btn btn-primary" onclick="createTrain()">Создать</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editTrainModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Изменение поезда</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="trainName">
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Номер</span>
+                    </div>
+                    <input id="editTrainNumber" type="number" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" required autofocus>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Платформа</span>
+                    </div>
+                    <select class="form-control" id="editPlatform">
+                        <div th:if="${platformList.size() !=0}" th:each="platform : ${platformList}">
+                            <option th:text="${platform.toString()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Путь</span>
+                    </div>
+                    <select class="form-control" id="editWay">
+                        <div th:if="${wayList.size() != 0}" th:each="way : ${wayList}">
+                            <option th:text="${way.getNumber()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Тип</span>
+                    </div>
+                    <select class="form-control" id="editType">
+                        <div th:if="${trainTypeList.size() != 0}" th:each="type : ${trainTypeList}">
+                            <option th:text="${type.getName()}"></option>
+                        </div>
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Длина</span>
+                    </div>
+                    <input class="form-control" id="editLength" type="number" min="1" max="71">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Время прибытия</span>
+                    </div>
+                    <input class="form-control" id="editArriveTime" type="time">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Время оправления</span>
+                    </div>
+                    <input class="form-control" id="editDepartureTime" type="time">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <span class="card-title">Маршрут следования:</span>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Из</span>
+                    </div>
+                    <select class="form-control" id="editCityFrom">
+                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
+                            <option th:text="${city.getName()}"></option>
+                        </div>
+                    </select>
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">В</span>
+                    </div>
+                    <select class="form-control" id="editCityTo">
+                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
+                            <option th:text="${city.getName()}"></option>
+                        </div>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="editTrain()">Изменить</button>
+                <button type="button" class="btn btn-danger" onclick="removeTrain()">Удалить</button>
             </div>
         </div>
     </div>
@@ -57,29 +215,27 @@
             <th scope="col">Путь</th>
             <th scope="col">Тип</th>
             <th scope="col">Длинна</th>
-            <th scope="col">Время прибытия<th>
+            <th scope="col">Время прибытия</th>
             <th scope="col">Время отправления</th>
             <th scope="col">Маршрут следования</th>
-
         </tr>
         </thead>
-        <tbody th:if="${!trains.isEmpty()}">
-            <tr th:each ="train : ${trains}">
-                <td scope="row" th:utext="${train.getKey().getTrainNumber()}"></td>
-                <td scope="row" th:utext="${train.getPlatformNumber()}"></td>
-                <td scope="row" th:utext="${train.getWay().getNumber()}"></td>
-                <td scope="row" th:utext="${train.getTrainType().getName()}"></td>
-                <td scope="row" th:utext="${train.getTrainLength()}"></td>
-                <td scope="row" th:utext="${train.getArriveTime()}"></td>
-                <td scope="row" th:utext="${train.getDepartureTime()}"></td>
-                <td scope="row" th:utext="${train.getRoute()}"></td>
+        <tbody th:if="${!trainList.isEmpty()}">
+            <tr th:each ="train : ${trainList}" onclick="showEditTrainDialog(this)">
+                <td class="number" th:utext="${train.getKey().getTrainNumber()}"></td>
+                <td class="platform" th:utext="${train.getPlatformNumber()}"></td>
+                <td class="way" th:utext="${train.getWay().getNumber()}"></td>
+                <td class="trainType" th:utext="${train.getTrainType().getName()}"></td>
+                <td class="length" th:utext="${train.getTrainLength()}"></td>
+                <td class="arrive" th:utext="${train.arriveTimeToString()}"></td>
+                <td class="departure" th:utext="${train.departureTimeToString()}"></td>
+                <td class="route" th:utext="${train.getRoute()}"></td>
             </tr>
         </tbody>
     </table>
 </div>
 <div class="btn-group" role="group" aria-label="Basic example">
     <button  data-toggle="modal" data-target="#createTrainModal" type="button" class="btn btn-secondary">Добавить</button>
-    <button type="button" class="btn btn-secondary">Удалить</button>
 </div>
 
 <script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>

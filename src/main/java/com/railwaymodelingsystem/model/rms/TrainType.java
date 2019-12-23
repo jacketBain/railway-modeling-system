@@ -20,12 +20,6 @@ public class TrainType implements Serializable {
 
     @Getter
     @Setter
-    @NotNull
-    @Column(name = "max_length", nullable = false)
-    private Integer maxLength;
-
-    @Getter
-    @Setter
-    @OneToMany(mappedBy = "trainType", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "trainType", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Collection<Shedule> shedules;
 }

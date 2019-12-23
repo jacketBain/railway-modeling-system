@@ -43,11 +43,15 @@
                     <div class="input-group-prepend">
                         <span class="input-group-text" id="inputName">Имя станции</span>
                     </div>
-                    <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[A-za-z][A-za-z0-9_-]{2,30}$" required autofocus>
-                    <label for="inputStationCity">Город:</label>
+                    <input id="inputStationName" type="text" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" pattern="^[а-яА-Я]{1}[а-яА-Я0-9_-]{1,29}$" required autofocus>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="inputCity">Город:</span>
+                    </div>
                     <select class="form-control" id="inputStationCity">
                         <div th:each="city : ${cityList}">
-                        <option th:utext="${city.getName()}"></option>
+                            <option th:utext="${city.getName()}"></option>
                         </div>
                     </select>
                 </div>

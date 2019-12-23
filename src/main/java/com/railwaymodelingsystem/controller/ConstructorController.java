@@ -9,8 +9,11 @@ import com.railwaymodelingsystem.model.rms.Way;
 import com.railwaymodelingsystem.model.rms.compositeKey.LinkPrimary;
 import com.railwaymodelingsystem.repository.LinkRepository;
 import com.railwaymodelingsystem.service.*;
+import com.railwaymodelingsystem.utils.StringValidator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -110,21 +113,16 @@ public class ConstructorController {
     BlockService blockService;
 
     @Autowired
-    LinkRepository linkRepository;
+    LinkService linkService;
 
-    final
+    @Autowired
     StationService stationService;
 
-    final
+    @Autowired
     UserService userService;
 
-    public ConstructorController(StationService stationService, UserService userService) {
-        this.stationService = stationService;
-        this.userService = userService;
-    }
-
     @GetMapping("/startConstructor/checkName")
-    public ResponseEntity<AjaxResponseBody> checkStationNAme(@RequestParam(value = "name")String stationName, Principal principal){
+    public ResponseEntity<AjaxResponseBody> checkStationName(@RequestParam(value = "name")String stationName, Principal principal){
         User user = userService.getByName(principal.getName());
         if(stationService.isExists(stationName, user))
             return ResponseEntity.ok(new AjaxResponseBody("Станция с именем " + stationName + "уже есть в базе данных", "ERROR"));
@@ -164,7 +162,7 @@ public class ConstructorController {
         User user = userService.getByName(principal.getName());
         Station station = stationService.getStationByNameAndUser(name, user);
         if(station == null)
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
         else {
             return ResponseEntity.ok(getStationEntity(station));
         }
@@ -176,11 +174,15 @@ public class ConstructorController {
         User user = userService.getByName(principal.getName());
         Station station = stationService.getStationByNameAndUser(way.getStation(), user);
         if (station == null) {
-            //TODO станция не найдена
-            return ResponseEntity.ok(null);
-        } else if (wayService.getByWayAndStation(way.getNumber(), station) != null) {
-            //TODO уже существует
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if (way.getNumber() <= 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Номер пути не может быть отрицательным или 0", "ERROR"));
+        } else if (way.getNumber() > 15){
+            return ResponseEntity.ok(new AjaxResponseBody("Нельза создать больше 15 путей", "ERROR"));
+        } else if (wayService.getByWayAndStation(way.getNumber(), station).size() != 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Путь уже существует", "ERROR"));
+        } else if (way.getNumber() != 1 && wayService.getByWayAndStation(way.getNumber() - 1, station) == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Вы пытаетесь создать непоследовательный путь", "ERROR"));
         }
         Way newWay = new Way();
         newWay.setNumber(way.getNumber());
@@ -195,11 +197,17 @@ public class ConstructorController {
         User user = userService.getByName(principal.getName());
         Station station = stationService.getStationByNameAndUser(block.getStation(), user);
         if (station == null) {
-            //TODO станция не найдена
-            return ResponseEntity.ok(null);
-        } else if (blockService.findByNameAndStation(block.getName(), station) != null) {
-            //TODO уже существует
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(!StringValidator.checkBlockName(block.getName())) {
+            return ResponseEntity.ok(new AjaxResponseBody("Некорректное имя блок-участка", "ERROR"));
+        } else if(block.getLength() < 1 || block.getLength() > 71) {
+            return ResponseEntity.ok(new AjaxResponseBody("Длина блок-участка может быть в диапазоне от 1 до 71", "ERROR"));
+        } else if(wayService.getByWayAndStation(block.getWay(), station).size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Невозможно добавить блок-участок на несуществующий путь", "ERROR"));
+        } else if(block.getPlatformNumber() != null && blockService.findByStationAndPlatform(station, block.getPlatformNumber()).size() >= 2) {
+            return ResponseEntity.ok(new AjaxResponseBody("К платформе не может прилегать больше 2-х путей", "ERROR"));
+        } else if (blockService.findByNameAndStation(block.getName(), station).size() == 1) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блок уже существует", "ERROR"));
         }
         Block newBlock = new Block();
         newBlock.setName(block.getName());
@@ -211,12 +219,11 @@ public class ConstructorController {
         } else {
             newBlock.setHasPlatform(false);
         }
-        Way way = wayService.getByWayAndStation(block.getWay(), station);
-        if (way == null) {
-            //TODO нет пути
-            return ResponseEntity.ok(null);
+        List<Way> wayList = wayService.getByWayAndStation(block.getWay(), station);
+        if (wayList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Нет такого пути", "ERROR"));
         }
-        newBlock.setWay(way);
+        newBlock.setWay(wayList.get(0));
         blockService.addBlock(newBlock);
         return ResponseEntity.ok(getStationEntity(station));
     }
@@ -226,24 +233,186 @@ public class ConstructorController {
     public ResponseEntity addLink(@NotNull @ModelAttribute StationEntity.Link link, Principal principal) {
         User user = userService.getByName(principal.getName());
         Station station = stationService.getStationByNameAndUser(link.getStation(), user);
-        Block blockFrom = blockService.findByNameAndStation(link.getBlockFrom(), station);
-        Block blockTo = blockService.findByNameAndStation(link.getBlockTo(), station);
+        List<Block> blockFromList = blockService.findByNameAndStation(link.getBlockFrom(), station);
+        List<Block> blockToList = blockService.findByNameAndStation(link.getBlockTo(), station);
         if (station == null) {
-            //TODO станция не найдена
-            return ResponseEntity.ok(null);
-        } else if (linkRepository.getByBlockFromAndAndBlockTo(blockFrom, blockTo) != null) {
-            //TODO уже существует
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if (blockService.findByNameAndStation(link.getBlockFrom(), station).size() == 0 ||
+                blockService.findByNameAndStation(link.getBlockTo(), station).size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Один или несколько блок-участков не существует", "ERROR"));
+        } else if (linkService.getByBlockFromAndBlockTo(blockFromList.get(0), blockToList.get(0)).size() != 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блоки уже связаны", "ERROR"));
         }
         Link newLink = new Link();
-        newLink.setBlockFrom(blockFrom);
-        newLink.setBlockTo(blockTo);
-//        linkRepository.addLink(newLink);
+        newLink.setBlockFrom(blockFromList.get(0));
+        newLink.setBlockTo(blockToList.get(0));
         LinkPrimary linkPrimary = new LinkPrimary();
-        linkPrimary.setBlockFromId(blockFrom.getId());
-        linkPrimary.setBlockToId(blockTo.getId());
+        linkPrimary.setBlockFromId(blockFromList.get(0).getId());
+        linkPrimary.setBlockToId(blockToList.get(0).getId());
         newLink.setKey(linkPrimary);
-        linkRepository.saveAndFlush(newLink);
+        linkService.addLink(newLink);
+        return ResponseEntity.ok(getStationEntity(station));
+    }
+
+    @PostMapping("/constructor/editBlock")
+    @Transactional
+    public ResponseEntity editBlock(@RequestParam(value = "old_name")String blockName,
+                                                      @NotNull @ModelAttribute StationEntity.Block block,
+                                                      Principal principal) {
+        User user = userService.getByName(principal.getName());
+        Station station = stationService.getStationByNameAndUser(block.getStation(), user);
+        List<Block> newBlockList = blockService.findByNameAndStation(block.getName(), station);
+        List<Block> oldBlockList = blockService.findByNameAndStation(blockName, station);
+        if (station == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(!StringValidator.checkBlockName(block.getName())) {
+            return ResponseEntity.ok(new AjaxResponseBody("Некорректное имя блок-участка", "ERROR"));
+        } else if(block.getLength() < 1 || block.getLength() > 71) {
+            return ResponseEntity.ok(new AjaxResponseBody("Длина блок-участка может быть в диапазоне от 1 до 71", "ERROR"));
+        } else if(wayService.getByWayAndStation(block.getWay(), station).size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Невозможно добавить блок-участок на несуществующий путь", "ERROR"));
+        } else if(block.getPlatformNumber() != null && blockService.findByStationAndPlatform(station, block.getPlatformNumber()).size() >= 2) {
+            return ResponseEntity.ok(new AjaxResponseBody("К платформе не может прилегать больше 2-х путей", "ERROR"));
+        } else if (newBlockList.size() == 1 && !oldBlockList.get(0).getName().equals(newBlockList.get(0).getName())) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блок уже существует", "ERROR"));
+        }
+        Block oldBlock = oldBlockList.get(0);
+        oldBlock.setName(block.getName());
+        oldBlock.setLength(block.getLength());
+        if (block.getPlatformNumber() != null) {
+            oldBlock.setHasPlatform(true);
+            oldBlock.setPlatformNumber(block.getPlatformNumber());
+        } else {
+            oldBlock.setHasPlatform(false);
+            oldBlock.setPlatformNumber(null);
+        }
+        List<Way> wayList = wayService.getByWayAndStation(block.getWay(), station);
+        if (wayList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Нет такого пути", "ERROR"));
+        }
+        oldBlock.setWay(wayList.get(0));
+        blockService.editBlock(oldBlock);
+        return ResponseEntity.ok(getStationEntity(station));
+    }
+
+    @PostMapping("/constructor/editWay")
+    @Transactional
+    public ResponseEntity editWay(@RequestParam(value = "old_number")String wayNumber,
+                                    @NotNull @ModelAttribute StationEntity.Way way,
+                                    Principal principal) {
+        User user = userService.getByName(principal.getName());
+        Station station = stationService.getStationByNameAndUser(way.getStation(), user);
+        List<Way> newWayList = wayService.getByWayAndStation(way.getNumber(), station);
+        if (!StringValidator.checkWayNumber(wayNumber)) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неправильный номер пути", "ERROR"));
+        }
+        List<Way> oldWayList = wayService.getByWayAndStation(Integer.parseInt(wayNumber), station);
+        if (station == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(oldWayList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Путь не существует", "ERROR"));
+        } else if (newWayList.size() == 1 && !oldWayList.get(0).getNumber().equals(newWayList.get(0).getNumber())) {
+            return ResponseEntity.ok(new AjaxResponseBody("Путь уже существует", "ERROR"));
+        }
+        Way oldWay = oldWayList.get(0);
+        oldWay.setNumber(way.getNumber());
+        wayService.editWay(oldWay);
+        return ResponseEntity.ok(getStationEntity(station));
+    }
+
+    @GetMapping("/constructor/removeBlock")
+    @Transactional
+    public ResponseEntity removeBlock(@RequestParam(value = "name") String blockName,
+                                      @RequestParam(value = "station") String stationName,
+                                    Principal principal) {
+        User user = userService.getByName(principal.getName());
+        Station station = stationService.getStationByNameAndUser(stationName, user);
+        if (station == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(!StringValidator.checkBlockName(blockName)) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неправильное имя блок-участка", "ERROR"));
+        }
+        List<Block> blockList = blockService.findByNameAndStation(blockName, station);
+        if(blockList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блок участок не существует", "ERROR"));
+        }
+        Block block = blockList.get(0);
+        List<Link> links = linkService.getByBlockFromOrBlockTo(block, block);
+
+        for (Link link : links) {
+            linkService.deleteLink(link);
+        }
+
+        blockService.deleteBlock(block);
+
+        return ResponseEntity.ok(getStationEntity(station));
+    }
+
+    @GetMapping("/constructor/removeWay")
+    @Transactional
+    public ResponseEntity removeWay(@RequestParam(value = "number")String wayNumber,
+                                      @RequestParam(value = "station")String stationName,
+                                      Principal principal) {
+        User user = userService.getByName(principal.getName());
+        Station station = stationService.getStationByNameAndUser(stationName, user);
+        if (!StringValidator.checkWayNumber(wayNumber)) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверный номер пути", "ERROR"));
+        }
+        List<Way> wayList = wayService.getByWayAndStation(Integer.parseInt(wayNumber), station);
+        if (station == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(wayList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Путь не существует", "ERROR"));
+        }
+        Way way = wayList.get(0);
+        List<Block> blockList = blockService.findAllByStationAndWay(station, way);
+
+        for (Block block : blockList) {
+            List<Link> links = linkService.getByBlockFromOrBlockTo(block, block);
+
+            for (Link link : links) {
+                linkService.deleteLink(link);
+            }
+
+            blockService.deleteBlock(block);
+        }
+
+        wayService.removeWay(way);
+
+        return ResponseEntity.ok(getStationEntity(station));
+    }
+
+    @GetMapping("/constructor/removeLink")
+    @Transactional
+    public ResponseEntity removeLink(@RequestParam(value = "blockFrom") String blockFromName,
+                                      @RequestParam(value = "blockTo") String blockToName,
+                                      @RequestParam(value = "station") String stationName,
+                                      Principal principal) {
+        User user = userService.getByName(principal.getName());
+        Station station = stationService.getStationByNameAndUser(stationName, user);
+        if (station == null) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if (!StringValidator.checkBlockName(blockFromName)) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неправильное имя первого блок-участка", "ERROR"));
+        } else if (!StringValidator.checkBlockName(blockToName)) {
+            return ResponseEntity.ok(new AjaxResponseBody("Неправильное имя второго блок-участка", "ERROR"));
+        }
+        List<Block> blockFromList = blockService.findByNameAndStation(blockFromName, station);
+        if(blockFromList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блок участок не существует", "ERROR"));
+        }
+        List<Block> blockToList = blockService.findByNameAndStation(blockToName, station);
+        if(blockToList.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блок участок не существует", "ERROR"));
+        }
+        Block blockFrom = blockFromList.get(0);
+        Block blockTo = blockToList.get(0);
+        List<Link> links = linkService.getByBlockFromAndBlockTo(blockFrom, blockTo);
+
+        if (links.size() == 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Такой связи нет", "ERROR"));
+        }
+        linkService.deleteLink(links.get(0));
         return ResponseEntity.ok(getStationEntity(station));
     }
 
@@ -252,7 +421,7 @@ public class ConstructorController {
         List<StationEntity.Block> blocks = new ArrayList<>();
         List<StationEntity.Link> links = new ArrayList<>();
 
-        for (Way way : wayService.getWayByStation(station)) {
+        for (Way way : wayService.getByStation(station)) {
             ways.add(new StationEntity.Way(way.getNumber(), station.getName()));
         }
         Map<Block, StationEntity.Block> blockNewBlockMap = new HashMap<>();
@@ -262,7 +431,7 @@ public class ConstructorController {
             blocks.add(newBlock);
         }
         for (Block blockFrom : station.getBlocks()) {
-            List<Link> linkList = linkRepository.getLinksByBlockFrom(blockFrom);
+            List<Link> linkList = linkService.getLinksByBlockFrom(blockFrom);
             if (linkList == null) {
                 break;
             }

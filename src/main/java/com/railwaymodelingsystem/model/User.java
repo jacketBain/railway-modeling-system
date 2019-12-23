@@ -28,6 +28,6 @@ public class User {
 
     @Getter
     @Setter
-    @OneToMany(mappedBy="user", cascade = CascadeType.REFRESH, fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="user", cascade = CascadeType.MERGE, fetch=FetchType.EAGER)
     private Collection<Station> stations;
 }
