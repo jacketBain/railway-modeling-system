@@ -23,10 +23,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 public class ModelingController {
@@ -85,6 +82,9 @@ public class ModelingController {
         private static class Event implements Serializable {
 
             @Getter
+            private String train;
+
+            @Getter
             private String block;
 
             @Getter
@@ -93,7 +93,8 @@ public class ModelingController {
             @Getter
             private long time;
 
-            public Event(String block, String type, long time) {
+            public Event(String train, String block, String type, long time) {
+                this.train = train;
                 this.block = block;
                 this.type = type;
                 this.time = time;
@@ -135,14 +136,13 @@ public class ModelingController {
         for (Block block : station.getBlocks()) {
             blockLinksMap.put(block, linkService.getLinksByBlockFrom(block));
         }
-        Schedule schedule = null;
+
         List<ScheduleEntity.Train> trains = new ArrayList<>();
         List<ScheduleEntity.Event> events = new ArrayList<>();
         try {
             Scheduler.buildStation(ways, shedules, blockLinksMap, station);
-            schedule = Scheduler.getSchedule();
+            Schedule schedule = Scheduler.getSchedule();
             schedule.printEvents();
-
 
             for (Shedule shedule : shedules) {
                 trains.add(new ScheduleEntity.Train(shedule.getKey().getTrainNumber().toString(),
@@ -157,7 +157,7 @@ public class ModelingController {
                 ));
             }
             for (Event event : schedule.getEvents()) {
-                events.add(new ScheduleEntity.Event(event.getBlock().toString(), event.getEventType().toString(), event.getTime()));
+                events.add(new ScheduleEntity.Event(event.getTrain().getNumber().toString(), event.getBlock().toString(), event.getEventType().toString(), event.getTime()));
             }
         } catch (SheduleException | TopologyException | StationException | ScheduleException e) {
             ResponseEntity.ok(new AjaxResponseBody("Невозможно получить график движения\nПричина:\n" + e.getMessage(), "ERROR"));

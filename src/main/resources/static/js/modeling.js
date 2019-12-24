@@ -1,5 +1,7 @@
 let canvas = new fabric.Canvas('canvas', { hoverCursor: 'pointer',
     selection: false,  width: 1000, height: window.innerHeight});
+let leftPadding = 120, blockWidth = 100, blockHeight = 50,
+    blockIntervalX = 200, wayHeight = 100;
 
 let currentTime;
 let currentTimeInput = $("#currentTime");
@@ -9,6 +11,7 @@ let timerId;
 
 let data;
 let schedule;
+let wayBlocks;
 
 initModeling();
 
@@ -22,6 +25,7 @@ function startModeling() {
         currentTime = getTimeInputDate();
         currentTime = new Date(currentTime.getTime() + getTimeSpeed());
         printTime();
+        drawTrains();
     }, 1000);
 }
 
@@ -85,18 +89,18 @@ function getTimeSpeed() {
 }
 
 function resetTime() {
-    $('#currentTime').val('00:00:00');
-    currentTime = getTimeInputDate();
+    currentTime = new Date(Date.UTC(1970, 1, 1, 0, 0, 0));
+    printTime();
 }
 
 function getTimeInputDate() {
-    return new Date('01.01.2000 ' + currentTimeInput.val());
+    return new Date('01.01.1970 ' + currentTimeInput.val() + ' GMT+00:00');
 }
 
 function getTimeString() {
-    let hour = currentTime.getHours();
-    let min  = currentTime.getMinutes();
-    let sec  = currentTime.getSeconds();
+    let hour = currentTime.getUTCHours();
+    let min  = currentTime.getUTCMinutes();
+    let sec  = currentTime.getUTCSeconds();
     hour = (hour < 10 ? "0" : "") + hour;
     min = (min < 10 ? "0" : "") + min;
     sec = (sec < 10 ? "0" : "") + sec;
@@ -114,13 +118,11 @@ function drawTopology() {
     else {
         canvas.clear();
 
-        let leftPadding = 120, blockWidth = 100, blockHeight = 50,
-            blockIntervalX = 200, wayHeight = 100;
         let blocks = data['blocks'];
         let links = data['links'];
         let ways = data['ways'];
 
-        let wayBlocks = [];
+        wayBlocks = [];
 
         for (let i = 0; i < ways.length; i++) {
             wayBlocks[ways[i]['number']] = [];
@@ -224,22 +226,63 @@ function drawTopology() {
 }
 
 function drawTrains() {
+    let blocks = data['blocks'];
 
-}
+    let objects = canvas.getObjects('circle');
+    for (let i in objects) {
+        canvas.remove(objects[i]);
+    }
 
-function drawTrain() {
-    let circle = new fabric.Circle({
-        left: 100,
-        top: 100,
-        radius: 100,
-        strokeWidth: 2,
-        stroke: 'red',
-        fill: 'White',
-        selectable: false,
-        originX: 'center',
-        originY: 'center'
-    });
-    canvas.add(circle);
+    let trains = schedule['trains'];
+    let events = schedule['events'];
+
+    let test = new Date('01.01.1970 00:00:00 GMT+00:00').getTime();
+
+    let lastOccupy, nextFree;
+    for (let i = 0; i < trains.length; i++) {
+        let train = trains[i];
+        for (let j = 0; j < events.length; j++) {
+            let event = events[j];
+            if (event['train'] === train['number']) {
+                if (event['time'] <= currentTime.getTime() && event['type'] === "Занятие") {
+                    if (lastOccupy === undefined || lastOccupy['time'] < event['time']) {
+                        lastOccupy = event;
+                    }
+                } else if (event['time'] <= currentTime.getTime() && event['type'] === "Стоянка") {
+                    if (lastOccupy === undefined || lastOccupy['time'] < event['time']) {
+                        lastOccupy = event;
+                    }
+                } else if (event['time'] >= currentTime.getTime() && event['type'] === "Освобождение") {
+                    if (nextFree === undefined || nextFree['time'] > event['time']) {
+                        nextFree = event;
+                    }
+                }
+            }
+        }
+        let currentBlock;
+        if (lastOccupy !== undefined && nextFree !== undefined) {
+            for (let j = 0; j < blocks.length; j++) {
+                let block = blocks[j];
+                if (block['name'] === lastOccupy['block']) {
+                    currentBlock = block;
+                    break;
+                }
+            }
+            let trainChordX = currentBlock['length'] / (lastOccupy['time'] - nextFree['time']) * (currentTime.getTime() - lastOccupy['time']);
+            let circle = new fabric.Circle({
+                left: leftPadding + (wayBlocks[currentBlock['way']].length - 1) * blockIntervalX + trainChordX,
+                top: wayHeight * currentBlock['way'] + blockHeight / 2,
+                radius: 1,
+                strokeWidth: 2,
+                stroke: 'red',
+                fill: 'White',
+                selectable: false,
+                originX: 'center',
+                originY: 'center'
+            });
+            canvas.add(circle);
+        }
+    }
 }
 
 function processData(newData) {
@@ -261,7 +304,6 @@ function processSchedule(newSchedule) {
     if (newSchedule !== "") {
         if (newSchedule.status !== "ERROR") {
             schedule = newSchedule;
-
         } else {
             alert(newSchedule.message);
         }

@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 @Entity
 @Table(name = "shedule", schema = "public")
@@ -84,12 +85,14 @@ public class Shedule implements Serializable {
     }
 
     public String arriveTimeToString() {
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
-        return localDateFormat.format(arriveTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(arriveTime);
     }
 
     public String departureTimeToString() {
-        SimpleDateFormat localDateFormat = new SimpleDateFormat("HH:mm");
-        return localDateFormat.format(departureTime);
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+        return dateFormat.format(departureTime);
     }
 }

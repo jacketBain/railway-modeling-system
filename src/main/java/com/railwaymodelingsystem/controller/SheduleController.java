@@ -122,7 +122,8 @@ public class SheduleController {
         Integer trainLength = shedule.getLength();
 
         Date arriveDate, departDate;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         City cityFrom = cityService.getCityByName(shedule.getCityFrom());
         City cityTo = cityService.getCityByName(shedule.getCityTo());
@@ -142,7 +143,7 @@ public class SheduleController {
             return ResponseEntity.ok(new AjaxResponseBody("Такого пути нет на станции", "ERROR"));
         } else if(trainType == null) {
             return ResponseEntity.ok(new AjaxResponseBody("Недопустимый тип поезда", "ERROR"));
-        } else if(trainLength < 0 || trainLength > 71) {
+        } else if(trainLength == null || trainLength < 0 || trainLength > 71) {
             return ResponseEntity.ok(new AjaxResponseBody("Длина поезда должна быть в диапазоне от 1 до 71 вагона", "ERROR"));
         } else if(cityFrom == null ||
                 cityTo == null) {
@@ -183,7 +184,8 @@ public class SheduleController {
         Integer trainLength = shedule.getLength();
 
         Date arriveDate, departureDate;
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         City cityFrom = cityService.getCityByName(shedule.getCityFrom());
         City cityTo = cityService.getCityByName(shedule.getCityTo());
