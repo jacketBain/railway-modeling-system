@@ -7,13 +7,10 @@ import com.railwaymodelingsystem.model.rms.Link;
 import com.railwaymodelingsystem.model.rms.Station;
 import com.railwaymodelingsystem.model.rms.Way;
 import com.railwaymodelingsystem.model.rms.compositeKey.LinkPrimary;
-import com.railwaymodelingsystem.repository.LinkRepository;
 import com.railwaymodelingsystem.service.*;
 import com.railwaymodelingsystem.utils.StringValidator;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -103,6 +100,7 @@ public class ConstructorController {
         @Getter
         private List<Link> links;
     }
+
     @Autowired
     CityService cityService;
 
@@ -158,7 +156,7 @@ public class ConstructorController {
 
     @RequestMapping(value = "/constructor/station", method = RequestMethod.GET)
     @Transactional
-    public ResponseEntity getStationByName(@RequestParam("name") String name, Principal principal) {
+    public ResponseEntity getStation(@RequestParam("name") String name, Principal principal) {
         User user = userService.getByName(principal.getName());
         Station station = stationService.getStationByNameAndUser(name, user);
         if(station == null)

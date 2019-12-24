@@ -29,10 +29,10 @@ public enum TrainType {
                 return PASSENGER;
             case "Сапсан":
                 return SAPSAN;
-            case "SUBURBAN":
+            case "Электричка":
                 return SUBURBAN;
             default:
-                throw new SheduleException("Неизвестный тип поезда");
+                throw new SheduleException("Неизвестный тип поезда " + trainType.getName());
         }
     }
 

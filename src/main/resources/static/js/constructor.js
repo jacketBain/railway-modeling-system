@@ -74,7 +74,7 @@ function drawTopology() {
             let text = new fabric.Text('БУ ' + block['name'] + (block['platformNumber'] === null ? '' : ' Пл: ' + block['platformNumber']) +'\nдлина:' + block['length'], {
                 fontFamily: 'Helvetica',
                 fontSize: 15,
-                left: leftPadding - 10 + (wayBlocks[block['way']].length - 1) * blockIntervalX + blockHeight / 2,
+                left: leftPadding - 20 + (wayBlocks[block['way']].length - 1) * blockIntervalX + blockHeight / 2,
                 top: wayHeight * block['way'] + 6,
                 lockMovementX: true,
                 lockMovementY : true,

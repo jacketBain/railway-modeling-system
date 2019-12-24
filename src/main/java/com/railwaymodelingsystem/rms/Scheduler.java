@@ -14,9 +14,6 @@ import java.util.*;
 
 public class Scheduler {
 
-    @Autowired
-    private static LinkRepository linkRepository;
-
     private static Station station;
 
     private Scheduler() { }
@@ -125,6 +122,7 @@ public class Scheduler {
     public static void buildStation(
             List<com.railwaymodelingsystem.model.rms.Way> ways,
             List<com.railwaymodelingsystem.model.rms.Shedule> shedules,
+            Map<com.railwaymodelingsystem.model.rms.Block, List<Link>> blockLinksMap,
             com.railwaymodelingsystem.model.rms.Station station
                                     ) throws SheduleException, TopologyException, StationException {
         //создание блоков
@@ -151,7 +149,7 @@ public class Scheduler {
         for (Map.Entry<com.railwaymodelingsystem.model.rms.Block, Block> blockNewBlockEntry : blockNewBlockMap.entrySet()) {
             com.railwaymodelingsystem.model.rms.Block block = blockNewBlockEntry.getKey();
             Block newDownBlock = blockNewBlockEntry.getValue();
-            List<Link> links = linkRepository.getLinksByBlockFrom(block);
+            List<Link> links = blockLinksMap.get(block);
             for (com.railwaymodelingsystem.model.rms.Link upperLink : links) {
                 Block newUpperBlock = blockNewBlockMap.get(upperLink.getBlockTo());
                 if (newDownBlock == newUpperBlock) {

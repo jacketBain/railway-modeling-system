@@ -22,7 +22,7 @@ public class HomeController {
         this.userService = userService;
     }
 
-    @GetMapping("/start_Constructor")
+    @GetMapping("/startConstructor")
     public String startConstructor(Model model, Principal principal){
         User user = userService.getByName(principal.getName());
         model.addAttribute("stations", user.getStations());
@@ -30,10 +30,17 @@ public class HomeController {
         return "startConstructor";
     }
 
-    @GetMapping("/start_Shedule")
+    @GetMapping("/startShedule")
     public String startShedule(Model model, Principal principal){
         User user = userService.getByName(principal.getName());
         model.addAttribute("stations", user.getStations());
         return "startShedule";
+    }
+
+    @GetMapping("/startModeling")
+    public String startModeling(Model model, Principal principal){
+        User user = userService.getByName(principal.getName());
+        model.addAttribute("stations", user.getStations());
+        return "startModeling";
     }
 }

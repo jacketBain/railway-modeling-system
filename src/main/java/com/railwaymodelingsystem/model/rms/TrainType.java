@@ -22,4 +22,9 @@ public class TrainType implements Serializable {
     @Setter
     @OneToMany(mappedBy = "trainType", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
     private Collection<Shedule> shedules;
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

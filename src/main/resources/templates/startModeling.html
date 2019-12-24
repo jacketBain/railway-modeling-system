@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Выбор станции</title>
+    <link rel ="stylesheet" type="text/css" href="webjars/bootstrap/4.3.1/css/bootstrap.min.css">
+    <style>
+        .container-chose {
+            min-width: 400px;
+            max-width: 550px;
+            position: relative;
+            margin-left: auto;
+            margin-right: auto;
+            padding-right: 15px;
+            padding-left: 15px;
+            margin-top: 10%;
+        }
+    </style>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light justify-content-between">
+        <a class="navbar-brand" href="/home" >
+            <img src="/img/back.png" alt="">
+            Менеджер расписаний
+        </a>
+        <img src="/img/table.png" alt="">
+    </nav>
+
+</head>
+<body>
+
+<div class="container-chose">
+    <div class="row flex-column">
+        <p>Выберите станцию:</p>
+    </div>
+    <div class = "row flex-column">
+        <div class="list-group">
+            <div th:if="${!stations.isEmpty()}" th:each="station : ${stations}">
+                <a class="list-group-item list-group-item-action" th:text="${station.getName()}"
+                   th:data-longDescription="${station.getName()}" onclick="openModeling(this.getAttribute('data-longDescription'));"></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="webjars/jquery/3.0.0/jquery.min.js" crossorigin="anonymous"></script>
+<script src="webjars/popper.js/1.14.3/umd/popper.min.js" crossorigin="anonymous"></script>
+<script src="webjars/bootstrap/4.3.1/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="js/startModeling.js"></script>
+<body>
+
+</body>
+</html>

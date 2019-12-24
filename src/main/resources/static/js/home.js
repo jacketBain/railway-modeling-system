@@ -1,7 +1,11 @@
 function openConstructor() {
-    window.location.href = "/start_Constructor";
+    window.location.href = "/startConstructor";
 }
 
 function openShedule() {
-    window.location.href="/start_Shedule";
+    window.location.href="/startShedule";
+}
+
+function openModeling() {
+    window.location.href="/startModeling";
 }
