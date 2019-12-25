@@ -53,9 +53,4 @@ public class Topology {
             throw new TopologyException("Станция должна содержать минимум 1 путь");
         }
     }
-
-    public boolean check() {
-
-        return true;
-    }
 }

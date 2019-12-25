@@ -23,7 +23,7 @@ public class PlaceAttempt {
     private List<Train> conflictTrains;
 
     @Getter
-    private Map<Block,List<Event>> blockEventsMap = new HashMap<>();
+    private Map<Block,List<Event>> blockEventsMap;
 
     public PlaceAttempt(@NotNull Claim claim, @NotNull Trip trip, @NotNull List<Train> conflictTrains, @NotNull Map<Block,List<Event>> blockEventsMap) {
         this.claim = claim;

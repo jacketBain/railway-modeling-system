@@ -11,6 +11,5 @@ public class Way {
 
     @NotNull
     @Getter
-    @Setter
     private Integer number;
 }
