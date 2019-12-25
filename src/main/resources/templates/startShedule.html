@@ -34,7 +34,6 @@
     </div>
     <div class = "row flex-column">
         <div class="list-group">
-            <a class="list-group-item list-group-item-primary list-group-item-action" onclick="openCreateStation()">Создать новую...</a>
             <div th:if="${!stations.isEmpty()}" th:each="station : ${stations}">
                 <a class="list-group-item list-group-item-action" th:text="${station.getName()}"
                    th:data-longDescription="${station.getName()}" onclick="openStation(this.getAttribute('data-longDescription'));"></a>
