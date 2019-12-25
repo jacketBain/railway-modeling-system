@@ -240,6 +240,8 @@ public class ConstructorController {
             return ResponseEntity.ok(new AjaxResponseBody("Один или несколько блок-участков не существует", "ERROR"));
         } else if (linkService.getByBlockFromAndBlockTo(blockFromList.get(0), blockToList.get(0)).size() != 0) {
             return ResponseEntity.ok(new AjaxResponseBody("Блоки уже связаны", "ERROR"));
+        } else if (linkService.getByBlockFromAndBlockTo(blockFromList.get(0), blockToList.get(0)).size() == 1) {
+            return ResponseEntity.ok(new AjaxResponseBody("Уже существует обратная связь", "ERROR"));
         }
         Link newLink = new Link();
         newLink.setBlockFrom(blockFromList.get(0));

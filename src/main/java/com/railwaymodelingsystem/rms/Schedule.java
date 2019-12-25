@@ -100,7 +100,7 @@ public class Schedule {
 
     private Map<Block,List<Event>> placeClaim(@NotNull Claim claim, List<Train> conflictTrains, Map<Block,List<Event>> blockEventsMap) throws ScheduleException {
         for (Trip trip : claim.getTrips()) {
-            PlaceAttempt placeAttempt = new PlaceAttempt(claim, trip, conflictTrains, blockEventsMap);
+            PlaceAttempt placeAttempt = new PlaceAttempt(claim, trip, conflictTrains, copyBlockEventsMap(blockEventsMap));
             Map<Block,List<Event>> newBlockEventsMap = placeTrip(placeAttempt);
             if (newBlockEventsMap != null) {
                 return newBlockEventsMap;
