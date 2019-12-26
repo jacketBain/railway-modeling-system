@@ -190,7 +190,7 @@ public class Scheduler {
                     cityFrom, cityTo
                     );
             Shedule newShedule = new Shedule(train, wayNewWayMap.get(shedule.getWay()),
-                    shedule.getArriveTime().getTime(), shedule.getDepartureTime().getTime());
+                    shedule.getArriveTime().getTime(), shedule.getDepartureTime().getTime() + 60 * 1000);
             newShedules.add(newShedule);
         }
         //Создание топологии и станции

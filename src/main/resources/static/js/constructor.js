@@ -1,5 +1,4 @@
 let addArrow = document.getElementById('addArrow');
-let drawArea = document.getElementById('canvas');
 let canvas = new fabric.Canvas('canvas', { hoverCursor: 'pointer',
     selection: false,  width: 1000, height: window.innerHeight});
 let isOpenedAddWay;
@@ -128,40 +127,60 @@ function drawTopology() {
         canvas.on({
             'object:selected': function (e) {
                 if(e.target.type === "rect") {
-                    document.getElementById('editBlock').style.display = 'block';
                     let i = 0;
                     for(;i < data['blocks'].length; i++) {
                         if (data['blocks'][i]['name'] === e.target.toObject().name) {
                             break;
                         }
                     }
-                    let block = data['blocks'][i];
-                    document.getElementById('blockName').value = e.target.toObject().name;
-                    document.getElementById('editBlockName').value = block['name'];
-                    document.getElementById('editBlockLength').value = block['length'];
-                    document.getElementById('editBlockWay').value = block['way'];
-                    if (block['platformNumber'] !== null) {
-                        document.getElementById('editHasPlatform').checked = true;
-                        document.getElementById('editPlatformNumber').value = block['platformNumber'];
-                    } else {
-                        document.getElementById('editHasPlatform').checked = false;
+
+                    let ways = data['ways'];
+                    let wayOptionsHtml = "";
+
+                    for (let i = 0; i < ways.length - 1; i++){
+                        for (let j = 0; j < ways.length - i - 1; j++){
+                            if(ways[j]['number'] > ways[j + 1]['number']){
+                                let tmp = ways[j];
+                                ways[j] = ways[j + 1];
+                                ways[j + 1] = tmp;
+                            }
+                        }
                     }
+
+                    for (let i = 0; i < ways.length; i++){
+                        wayOptionsHtml += "<option>" + ways[i]['number'] + "</option>";
+                    }
+                    $('#editBlockWay').html(wayOptionsHtml);
+
+                    let block = data['blocks'][i];
+                    $('#blockName').val(e.target.toObject().name);
+                    $('#editBlockName').val(block['name']);
+                    $('#editBlockLength').val(block['length']);
+                    $('#editBlockWay').val(block['way']);
+                    if (block['platformNumber'] !== null) {
+                        $('#editHasPlatform').prop('checked', true);
+                        $('#editPlatformNumber').val(block['platformNumber']);
+                    } else {
+                        $('#editHasPlatform').prop('checked', false);
+                    }
+                    $('#editBlockModal').modal('toggle');
                 } else if (e.target.type === "text") {
-                    document.getElementById('editWay').style.display = 'block';
-                    document.getElementById('wayNumber').value = e.target.toObject().number;
-                    document.getElementById('editWayNumber').value = e.target.toObject().number;
+                    $('#editWayModal').modal('toggle');
+                    $('#wayNumber').val(e.target.toObject().number);
+                    $('#editWayNumber').val(e.target.toObject().number);
                 } else if (e.target.type === "line") {
-                    document.getElementById('removeLink').style.display = 'block';
-                    document.getElementById('blockFrom').value = e.target.toObject().blockFrom;
-                    document.getElementById('blockTo').value = e.target.toObject().blockTo;
+                   $('#removeLink').style.display = 'block';
+                    $('#blockFrom').value = e.target.toObject().blockFrom;
+                    $('#blockTo').value = e.target.toObject().blockTo;
                 }
 
-            },
-            'selection:cleared' : function (e) {
-                document.getElementById('editBlock').style.display = 'none';
-                document.getElementById('editWay').style.display = 'none';
-                document.getElementById('removeLink').style.display = 'none';
             }
+            // ,
+            // 'selection:cleared' : function (e) {
+            //     $('#editBlock').style.display = 'none';
+            //     $('#editWay').style.display = 'none';
+            //     $('#removeLink').style.display = 'none';
+            // }
         });
     }
 }
@@ -221,6 +240,9 @@ function editWay() {
         "/constructor/editWay?old_number=" + document.getElementById('wayNumber').value,
         {'number': document.getElementById('editWayNumber').value, 'station': localStorage.getItem("stationName")},
         function (newData) {
+            if(newData.status !== 'ERROR'){
+                $('#editWayModal').modal('toggle');
+            }
             processData(newData);
         }
     );
@@ -232,6 +254,9 @@ function editBlock() {
         {'name': document.getElementById('editBlockName').value, 'way': document.getElementById('editBlockWay').value, 'length': document.getElementById('editBlockLength').value,
             'platformNumber': document.getElementById('editPlatformNumber').value, 'station': localStorage.getItem("stationName")},
         function (newData) {
+            if(newData.status !== 'ERROR'){
+                $('#editBlockModal').modal('toggle');
+            }
             processData(newData);
         }
     );
@@ -243,6 +268,9 @@ function removeWay() {
         {'number': document.getElementById('editWayNumber').value,
             'station' : localStorage.getItem("stationName")},
         function (newData) {
+            if(newData.status !== 'ERROR'){
+                $('#editWayModal').modal('toggle');
+            }
             processData(newData);
         }
     )
@@ -254,6 +282,9 @@ function removeBlock() {
         {'name': document.getElementById('editBlockName').value,
             'station' : localStorage.getItem("stationName")},
         function (newData) {
+            if(newData.status !== 'ERROR'){
+                $('#editBlockModal').modal('toggle');
+            }
             processData(newData);
         }
     )

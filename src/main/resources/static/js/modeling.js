@@ -200,6 +200,9 @@ function drawTopology() {
                         blockToIndex = k;
                         blockToWay = ways[j]['number'];
                     }
+                    if (blockFromWay !== undefined && blockToWay !== undefined) {
+                        break;
+                    }
                 }
             }
 
@@ -233,25 +236,25 @@ function modeling() {
     for (let i in objects) {
         canvas.remove(objects[i]);
     }
-
+    let time = currentTime.getTime();
     for (let i = 0; i < trains.length; i++) {
-        modelingTrain(trains[i]);
+        modelingTrain(trains[i], time);
     }
 }
 
-function modelingTrain(train) {
+function modelingTrain(train, time) {
     let inBlock;
     let leftEvent;
     let rightEvent;
-    //currentTime = new Date(Date.UTC(1970, 1, 1, 0, 20, 0));
+
     for (let i = 0; i < events.length; i++) {
         let event = events[i];
-        if (train['number'] === event['train'] && event['time'] <= currentTime.getTime()) {
+        if (train['number'] === event['train'] && event['time'] <= time) {
             if (leftEvent === undefined || leftEvent['time'] < event['time']) {
                 leftEvent = event;
             }
         }
-        if (train['number'] === event['train'] && event['time'] >= currentTime.getTime()) {
+        if (train['number'] === event['train'] && event['time'] > time) {
             if (rightEvent === undefined || rightEvent['time'] > event['time']) {
                 rightEvent = event;
             }
@@ -263,6 +266,10 @@ function modelingTrain(train) {
         inBlock = false;
     } else {
         inBlock = true;
+        if (rightEvent['time'] - time < 60 * 1000) {
+            modelingTrain(train, rightEvent['time'] + 1);
+            return;
+        }
     }
     drawTrain(train,leftEvent,rightEvent,inBlock);
 }
@@ -284,7 +291,11 @@ function drawTrain(train,leftEvent,rightEvent,inBlock) {
         } else {
             nextTime = rightEvent['time'];
         }
-        trainChordX = blockWidth / (nextTime - 60 * 1000 - leftEvent['time']) * (currentTime.getTime() - leftEvent['time']);
+        let minute = 0;
+        if (leftEvent['type'] !== "Стоянка") {
+            minute = 60 * 1000;
+        }
+        trainChordX = blockWidth / (nextTime - minute - leftEvent['time']) * (currentTime.getTime() - leftEvent['time']);
         if (trainChordX > blockWidth) {
             trainChordX = blockWidth;
         }
@@ -302,6 +313,64 @@ function drawTrain(train,leftEvent,rightEvent,inBlock) {
         let circle = new fabric.Circle({
             left: leftPadding + blockIntervalX * leftOffset + trainChordX,
             top: wayHeight * currentBlock['way'] + blockHeight / 2 + 3,
+            radius: 5,
+            strokeWidth: 2,
+            stroke: 'red',
+            fill: 'White',
+            selectable: false,
+            originX: 'center',
+            originY: 'center'
+        });
+        canvas.add(circle);
+    } else {
+        let ways = data['ways'];
+        let blockFromIndex, blockToIndex,
+            blockFromWay, blockToWay;
+        for (let j = 0; j < ways.length; j++) {
+            for (let k = 0; k < wayBlocks[ways[j]['number']].length; k++) {
+                if (wayBlocks[ways[j]['number']][k]['name'] === leftEvent['block']) {
+                    blockFromIndex = k;
+                    blockFromWay = ways[j]['number'];
+                } else if (wayBlocks[ways[j]['number']][k]['name'] === rightEvent['block']) {
+                    blockToIndex = k;
+                    blockToWay = ways[j]['number'];
+                }
+            }
+        }
+
+        let leftBlockX = leftPadding + blockFromIndex * blockIntervalX + blockWidth;
+        let leftBlockY = wayHeight * blockFromWay + blockHeight / 2;
+        let rightBlockX = leftPadding + blockToIndex * blockIntervalX;
+        let rightBlockY = wayHeight * blockToWay + blockHeight / 2;
+
+        let linkWidth, linkHeight;
+        if (train['direction'] === "ODD") {
+            linkWidth =  leftBlockX - rightBlockX;
+            // if (blockFromWay < blockToWay) {
+            //    linkHeight = rightBlockY - leftBlockY;
+            // } else {
+            //     linkHeight = leftBlockY - rightBlockY;
+            // }
+        } else {
+            linkWidth = rightBlockX - leftBlockX;
+            // if (blockFromWay < blockToWay) {
+            //     linkHeight = rightBlockY - leftBlockY;
+            // } else {
+            //     linkHeight = leftBlockY - rightBlockY;
+            // }
+        }
+        linkHeight = rightBlockY - leftBlockY;
+
+        let trainChordX = linkWidth / (60 * 1000) * (currentTime.getTime() - leftEvent['time'] + 60 * 1000);
+        let trainChordY = linkHeight / (60 * 1000) * (currentTime.getTime() - leftEvent['time'] + 60 * 1000);
+
+        if (train['direction'] === "ODD") {
+            trainChordX = blockWidth - trainChordX;
+            trainChordY = wayHeight - trainChordY;
+        }
+        let circle = new fabric.Circle({
+            left: leftPadding + blockIntervalX * blockFromIndex + blockWidth + trainChordX,
+            top: wayHeight * blockFromWay + blockHeight / 2 + 3 + trainChordY,
             radius: 5,
             strokeWidth: 2,
             stroke: 'red',

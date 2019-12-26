@@ -16,6 +16,91 @@
 	
 </head>
 <body>
+
+<div class="modal fade" id="editBlockModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Изменение блок-участка</h4>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="blockName">
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Имя блок-участка</span>
+                    </div>
+                    <input type="text" class="form-control pr-2" id="editBlockName" pattern="/^[а-яА-я0-9a-zA-z]*$/">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Длина</span>
+                    </div>
+                    <input type="number" class="form-control pr-2" id="editBlockLength" min="1" max="70">
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Путь</span>
+                    </div>
+                    <select class="form-control" id="editBlockWay">
+                    </select>
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">С платформой</span>
+                    </div>
+                    <div class="pl-2 pt-2">
+                        <input type="checkbox" class="form-check-input ml-2" id="editHasPlatform">
+                    </div>
+
+
+                </div>
+                <div class="input-group mb-2 mt-2">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Номер платформы</span>
+                    </div>
+                    <input type="number" class="form-control pr-2" id="editPlatformNumber" min="1" max="15">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="editBlock()">Изменить</button>
+                <button type="button" class="btn btn-danger" onclick="removeBlock()">Удалить</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editWayModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Изменение пути</h4>
+            </div>
+            <div class="modal-body">
+                <input id="wayNumber" type="hidden">
+                <div class="form-group pr-4 pl-4">
+                    <label for="editWayNumber">Номер пути</label>
+                    <input type="number" class="form-control pr-2" id="editWayNumber" min="1" max="15" >
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div class="form-group pr-4 pl-4 text-center">
+                    <button type="button" class="btn btn-primary" onclick="editWay()">Изменить</button>
+                </div>
+                <div class="form-group pr-4 pl-4 text-center">
+                    <button type="button" class="btn btn-danger" onclick="removeWay()">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
@@ -23,64 +108,7 @@
                 <canvas id="canvas"></canvas>
             </div>
             <div id="editWay" class="row fixed-bottom bg-light p-2 m-2 w-50" style="display: none">
-                <input id="wayNumber" type="hidden">
-                <div class="form-group pr-4 pl-4">
-                    <label for="editWayNumber">Номер пути</label>
-                    <input type="number" class="form-control pr-2" id="editWayNumber" min="1" max="15" >
-                </div>
 
-                <div class="form-group pr-4 pl-4 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="editWay()">Изменить</button>
-                </div>
-                <div class="form-group pr-4 pl-4 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="removeWay()">Удалить</button>
-                </div>
-            </div>
-            <div id="editBlock" class="row fixed-bottom bg-light p-2 m-2 w-50" style="display: none">
-                <input id="blockName" type="hidden">
-                <div class="form-group pr-4 pl-4">
-                    <label for="editBlockName">Имя блок-участка</label>
-                    <input type="text" class="form-control pr-2" id="editBlockName" pattern="/^[а-яА-я0-9a-zA-z]*$/">
-                </div>
-                <div class="form-group pr-4 pl-4">
-                    <label for="inputBlockLength">Длина</label>
-                    <input type="number" class="form-control pr-2" id="editBlockLength" min="1" max="70">
-                </div>
-                <div class="form-group pr-4 pl-4">
-                    <label for="inputWay">Путь</label>
-                    <select class="form-control" id="editBlockWay">
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                        <option>13</option>
-                        <option>14</option>
-                        <option>15</option>
-                    </select>
-                </div>
-
-                <div class="form-group form-check pl-5 pr-5">
-                    <input type="checkbox" class="form-check-input" id="editHasPlatform">
-                    <label class="form-check-label" for="hasPlatform">С платформой</label>
-                </div>
-                <div class="form-group pr-4 pl-4">
-                    <label for="inputPlatformNumber">Номер платформы</label>
-                    <input type="number" class="form-control pr-2" id="editPlatformNumber" min="1" max="15">
-                </div>
-                <div class="form-group pr-4 pl-4 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="editBlock()">Изменить</button>
-                </div>
-                <div class="form-group pr-4 pl-4 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="removeBlock()">Удалить</button>
-                </div>
             </div>
             <div id="removeLink" class="row fixed-bottom bg-light p-2 m-2 w-50" style="display: none">
                 <input id="blockFrom" type="hidden">

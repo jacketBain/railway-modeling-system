@@ -4,6 +4,7 @@ import com.railwaymodelingsystem.model.AjaxResponseBody;
 import com.railwaymodelingsystem.model.User;
 import com.railwaymodelingsystem.model.rms.*;
 import com.railwaymodelingsystem.rms.Event;
+import com.railwaymodelingsystem.rms.EventType;
 import com.railwaymodelingsystem.rms.RMSException.ScheduleException;
 import com.railwaymodelingsystem.rms.RMSException.SheduleException;
 import com.railwaymodelingsystem.rms.RMSException.StationException;
@@ -166,7 +167,6 @@ public class ModelingController {
                         shedule.getDirection().toString()
                 ));
             }
-
             for (Event event : schedule.getEvents()) {
                 events.add(new ScheduleEntity.Event(event.getTrain().getNumber().toString(), event.getBlock().toString(), event.getEventType().toString(), dateFormat.format(new Date(event.getTime()))));
             }
