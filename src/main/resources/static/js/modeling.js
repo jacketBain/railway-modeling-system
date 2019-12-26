@@ -11,6 +11,9 @@ let timerId;
 
 let data;
 let schedule;
+let blocks;
+let trains;
+let events;
 let wayBlocks;
 
 initModeling();
@@ -25,7 +28,7 @@ function startModeling() {
         currentTime = getTimeInputDate();
         currentTime = new Date(currentTime.getTime() + getTimeSpeed());
         printTime();
-        drawTrains();
+        modeling();
     }, 1000);
 }
 
@@ -225,63 +228,89 @@ function drawTopology() {
     }
 }
 
-function drawTrains() {
-    let blocks = data['blocks'];
-
+function modeling() {
     let objects = canvas.getObjects('circle');
     for (let i in objects) {
         canvas.remove(objects[i]);
     }
 
-    let trains = schedule['trains'];
-    let events = schedule['events'];
-
-    let test = new Date('01.01.1970 00:00:00 GMT+00:00').getTime();
-
-    let lastOccupy, nextFree;
     for (let i = 0; i < trains.length; i++) {
-        let train = trains[i];
-        for (let j = 0; j < events.length; j++) {
-            let event = events[j];
-            if (event['train'] === train['number']) {
-                if (event['time'] <= currentTime.getTime() && event['type'] === "Занятие") {
-                    if (lastOccupy === undefined || lastOccupy['time'] < event['time']) {
-                        lastOccupy = event;
-                    }
-                } else if (event['time'] <= currentTime.getTime() && event['type'] === "Стоянка") {
-                    if (lastOccupy === undefined || lastOccupy['time'] < event['time']) {
-                        lastOccupy = event;
-                    }
-                } else if (event['time'] >= currentTime.getTime() && event['type'] === "Освобождение") {
-                    if (nextFree === undefined || nextFree['time'] > event['time']) {
-                        nextFree = event;
-                    }
-                }
+        modelingTrain(trains[i]);
+    }
+}
+
+function modelingTrain(train) {
+    let inBlock;
+    let leftEvent;
+    let rightEvent;
+    //currentTime = new Date(Date.UTC(1970, 1, 1, 0, 20, 0));
+    for (let i = 0; i < events.length; i++) {
+        let event = events[i];
+        if (train['number'] === event['train'] && event['time'] <= currentTime.getTime()) {
+            if (leftEvent === undefined || leftEvent['time'] < event['time']) {
+                leftEvent = event;
             }
         }
+        if (train['number'] === event['train'] && event['time'] >= currentTime.getTime()) {
+            if (rightEvent === undefined || rightEvent['time'] > event['time']) {
+                rightEvent = event;
+            }
+        }
+    }
+    if (leftEvent === undefined || rightEvent === undefined) {
+        return;
+    } else if (leftEvent['type'] === "Освобождение") {
+        inBlock = false;
+    } else {
+        inBlock = true;
+    }
+    drawTrain(train,leftEvent,rightEvent,inBlock);
+}
+
+function drawTrain(train,leftEvent,rightEvent,inBlock) {
+    if (inBlock) {
         let currentBlock;
-        if (lastOccupy !== undefined && nextFree !== undefined) {
-            for (let j = 0; j < blocks.length; j++) {
-                let block = blocks[j];
-                if (block['name'] === lastOccupy['block']) {
-                    currentBlock = block;
-                    break;
-                }
+        for (let i = 0; i < blocks.length; i++) {
+            let block = blocks[i];
+            if (block['name'] === leftEvent['block']) {
+                currentBlock = block;
+                break;
             }
-            let trainChordX = currentBlock['length'] / (lastOccupy['time'] - nextFree['time']) * (currentTime.getTime() - lastOccupy['time']);
-            let circle = new fabric.Circle({
-                left: leftPadding + (wayBlocks[currentBlock['way']].length - 1) * blockIntervalX + trainChordX,
-                top: wayHeight * currentBlock['way'] + blockHeight / 2,
-                radius: 1,
-                strokeWidth: 2,
-                stroke: 'red',
-                fill: 'White',
-                selectable: false,
-                originX: 'center',
-                originY: 'center'
-            });
-            canvas.add(circle);
         }
+        let trainChordX;
+        let nextTime;
+        if (leftEvent['type'] === "Стоянка") {
+            nextTime = train['arrive'];
+        } else {
+            nextTime = rightEvent['time'];
+        }
+        trainChordX = blockWidth / (nextTime - 60 * 1000 - leftEvent['time']) * (currentTime.getTime() - leftEvent['time']);
+        if (trainChordX > blockWidth) {
+            trainChordX = blockWidth;
+        }
+        if (train['direction'] === "ODD") {
+            trainChordX = blockWidth - trainChordX;
+        }
+
+        let leftOffset;
+        for (let j = 0; j < wayBlocks[currentBlock['way']].length; j++) {
+            if (wayBlocks[currentBlock['way']][j]['name'] === currentBlock['name']) {
+                leftOffset = j;
+                break;
+            }
+        }
+        let circle = new fabric.Circle({
+            left: leftPadding + blockIntervalX * leftOffset + trainChordX,
+            top: wayHeight * currentBlock['way'] + blockHeight / 2 + 3,
+            radius: 5,
+            strokeWidth: 2,
+            stroke: 'red',
+            fill: 'White',
+            selectable: false,
+            originX: 'center',
+            originY: 'center'
+        });
+        canvas.add(circle);
     }
 }
 
@@ -294,6 +323,13 @@ function processData(newData) {
             for (let i = 0; i < data['ways'].length; i++) {
                 ways += "<option>" + data['ways'][i]['number'] + "</option>";
             }
+            $.get(
+                "/modeling/schedule",
+                {'station': localStorage.getItem("stationName")},
+                function (newSchedule) {
+                    processSchedule(newSchedule);
+                }
+            )
         } else {
             alert(newData.message);
         }
@@ -304,6 +340,19 @@ function processSchedule(newSchedule) {
     if (newSchedule !== "") {
         if (newSchedule.status !== "ERROR") {
             schedule = newSchedule;
+
+            trains = schedule['trains'];
+            events = schedule['events'];
+            blocks = data['blocks'];
+
+            for (let i =0; i < events.length; i++) {
+                events[i]['time'] = new Date('01.01.1970 '+ events[i]['time'] + ' GMT+00:00').getTime();
+            }
+
+            for (let i = 0; i < trains.length; i++) {
+                trains[i]['arrive'] = new Date('01.01.1970 '+ trains[i]['arrive'] + ' GMT+00:00').getTime();
+                trains[i]['departure'] = new Date('01.01.1970 '+ trains[i]['departure'] + ' GMT+00:00').getTime();
+            }
         } else {
             alert(newSchedule.message);
         }
@@ -316,13 +365,6 @@ $(document).ready(function () {
         {'name': localStorage.getItem("stationName")},
         function (newData) {
             processData(newData);
-        }
-    )
-    $.get(
-        "/modeling/schedule",
-        {'station': localStorage.getItem("stationName")},
-        function (newSchedule) {
-            processSchedule(newSchedule);
         }
     )
 });

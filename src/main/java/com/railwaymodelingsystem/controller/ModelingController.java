@@ -23,6 +23,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.transaction.Transactional;
 import java.io.Serializable;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -30,7 +33,6 @@ public class ModelingController {
 
     @AllArgsConstructor
     private static class ScheduleEntity implements Serializable {
-
         @Getter
         private List<Train> trains;
 
@@ -66,7 +68,10 @@ public class ModelingController {
             @Getter
             private String departure;
 
-            public Train(String number, String length, String type, String cityFrom, String cityTo, String way, String platform, String arrive, String departure) {
+            @Getter
+            private String direction;
+
+            public Train(String number, String length, String type, String cityFrom, String cityTo, String way, String platform, String arrive, String departure, String direction) {
                 this.number = number;
                 this.length = length;
                 this.type = type;
@@ -76,6 +81,7 @@ public class ModelingController {
                 this.platform = platform;
                 this.arrive = arrive;
                 this.departure = departure;
+                this.direction = direction;
             }
         }
 
@@ -91,9 +97,9 @@ public class ModelingController {
             private String type;
 
             @Getter
-            private long time;
+            private String time;
 
-            public Event(String train, String block, String type, long time) {
+            public Event(String train, String block, String type, String time) {
                 this.train = train;
                 this.block = block;
                 this.type = type;
@@ -144,6 +150,9 @@ public class ModelingController {
             Schedule schedule = Scheduler.getSchedule();
             schedule.printEvents();
 
+            DateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+            dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
+
             for (Shedule shedule : shedules) {
                 trains.add(new ScheduleEntity.Train(shedule.getKey().getTrainNumber().toString(),
                         shedule.getTrainLength().toString(),
@@ -152,15 +161,17 @@ public class ModelingController {
                         shedule.getCityTo().toString(),
                         shedule.getWay().getNumber().toString(),
                         shedule.getPlatformNumber().toString(),
-                        shedule.getArriveTime().toString(),
-                        shedule.getDepartureTime().toString()
+                        dateFormat.format(new Date(shedule.getArriveTime().getTime())),
+                        dateFormat.format(new Date(shedule.getDepartureTime().getTime())),
+                        shedule.getDirection().toString()
                 ));
             }
+
             for (Event event : schedule.getEvents()) {
-                events.add(new ScheduleEntity.Event(event.getTrain().getNumber().toString(), event.getBlock().toString(), event.getEventType().toString(), event.getTime()));
+                events.add(new ScheduleEntity.Event(event.getTrain().getNumber().toString(), event.getBlock().toString(), event.getEventType().toString(), dateFormat.format(new Date(event.getTime()))));
             }
         } catch (SheduleException | TopologyException | StationException | ScheduleException e) {
-            ResponseEntity.ok(new AjaxResponseBody("Невозможно получить график движения\nПричина:\n" + e.getMessage(), "ERROR"));
+            return ResponseEntity.ok(new AjaxResponseBody("Невозможно получить график движения\nПричина:\n" + e.getMessage(), "ERROR"));
         }
         return ResponseEntity.ok(new ScheduleEntity(trains, events));
     }

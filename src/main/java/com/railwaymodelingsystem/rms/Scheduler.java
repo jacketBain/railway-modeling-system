@@ -92,6 +92,7 @@ public class Scheduler {
         Train train8 = new Train(1008, TrainType.SUBURBAN, 5, cityTo, cityFrom);
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
 
         Long arriveTime1 = dateFormat.parse("00:10:00").getTime();
         Long departureTime1 = dateFormat.parse("00:30:00").getTime();

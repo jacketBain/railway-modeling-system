@@ -271,7 +271,7 @@ public class ConstructorController {
             return ResponseEntity.ok(new AjaxResponseBody("Длина блок-участка может быть в диапазоне от 1 до 71", "ERROR"));
         } else if(wayService.getByWayAndStation(block.getWay(), station).size() == 0) {
             return ResponseEntity.ok(new AjaxResponseBody("Невозможно добавить блок-участок на несуществующий путь", "ERROR"));
-        } else if(block.getPlatformNumber() != null && blockService.findByStationAndPlatform(station, block.getPlatformNumber()).size() >= 2) {
+        } else if(!blockName.equals(block.name) && block.getPlatformNumber() != null && blockService.findByStationAndPlatform(station, block.getPlatformNumber()).size() >= 2) {
             return ResponseEntity.ok(new AjaxResponseBody("К платформе не может прилегать больше 2-х путей", "ERROR"));
         } else if (newBlockList.size() == 1 && !oldBlockList.get(0).getName().equals(newBlockList.get(0).getName())) {
             return ResponseEntity.ok(new AjaxResponseBody("Блок уже существует", "ERROR"));

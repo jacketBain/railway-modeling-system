@@ -140,7 +140,7 @@ function drawTopology() {
                     document.getElementById('editBlockName').value = block['name'];
                     document.getElementById('editBlockLength').value = block['length'];
                     document.getElementById('editBlockWay').value = block['way'];
-                    if (block['platformNumber'] !== undefined) {
+                    if (block['platformNumber'] !== null) {
                         document.getElementById('editHasPlatform').checked = true;
                         document.getElementById('editPlatformNumber').value = block['platformNumber'];
                     } else {

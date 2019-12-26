@@ -144,7 +144,7 @@ public class Schedule {
         Block platformBlock = trip.getPlatformBlock();
         Map<Block,List<Event>> blockEventsMap = placeAttempt.getBlockEventsMap();
 
-        int tripBeforeStayLength = 0;
+        long tripBeforeStayLength = 0;
         for (Block tripBlock : tripBlocks) {
             tripBeforeStayLength += tripBlock.getLength();
             if (tripBlock == platformBlock) {
@@ -156,21 +156,19 @@ public class Schedule {
 
         long arriveTime = shedule.getArriveTime();
         long departureTime = shedule.getDepartureTime();
-        long currentTime = arriveTime - tripBeforeStayLength / trainSpeed * 1000; //время появления поезда на станции
+        long currentTime = (long)(arriveTime - (double)(tripBeforeStayLength) / trainSpeed * 1000); //время появления поезда на станции
         long freeTime;
         List<Train> conflictTrains = new ArrayList<>();
 
         for (Block block : tripBlocks) {
             List<Event> blockEvents = blockEventsMap.get(block);
-            long occupyTime = currentTime;
+            long occupyTime = currentTime + 1000;
 
             if (block == platformBlock) {
-                currentTime = departureTime;
-                freeTime = currentTime + (train.getLength() * 16 * 1000 / trainSpeed);
+                currentTime = freeTime = departureTime;
             } else {
-                freeTime = currentTime + ((block.getLength() + train.getLength()) * 16 * 1000 / trainSpeed);
+                currentTime = freeTime = currentTime + (block.getLength() * 16 * 1000 / trainSpeed);
             }
-            currentTime = currentTime + (block.getLength() * 16 * 1000 / trainSpeed);
 
             List<Train> newConflictTrains = findConflictTrains(blockEvents, occupyTime, freeTime);
             for (Train newConflictTrain : newConflictTrains) {

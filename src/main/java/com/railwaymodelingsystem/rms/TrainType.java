@@ -4,10 +4,10 @@ import com.railwaymodelingsystem.rms.RMSException.SheduleException;
 import lombok.Getter;
 
 public enum TrainType {
-    CARGO("Грузовой",33),
-    PASSENGER("Пассажирский",  25),
-    SAPSAN("Сапсан",  69),
-    SUBURBAN("Пригородный", 27);
+    CARGO("Грузовой",5),
+    PASSENGER("Пассажирский",  3),
+    SAPSAN("Сапсан",  7),
+    SUBURBAN("Пригородный", 4);
 
     @Getter
     private String name;

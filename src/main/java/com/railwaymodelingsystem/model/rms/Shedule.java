@@ -2,6 +2,7 @@ package com.railwaymodelingsystem.model.rms;
 
 import antlr.Utils;
 import com.railwaymodelingsystem.model.rms.compositeKey.ShedulePrimary;
+import com.railwaymodelingsystem.rms.Direction;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -88,6 +89,10 @@ public class Shedule implements Serializable {
         SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
         dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return dateFormat.format(arriveTime);
+    }
+
+    public Direction getDirection() {
+        return key.getTrainNumber() % 2 == 0 ? Direction.EVEN : Direction.ODD;
     }
 
     public String departureTimeToString() {

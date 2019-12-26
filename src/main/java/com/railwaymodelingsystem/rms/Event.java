@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.text.DateFormat;
 import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 @AllArgsConstructor
 public class Event {
@@ -31,6 +32,7 @@ public class Event {
     public String toString() {
         Locale locale = new Locale("ru", "RU");
         DateFormat dateFormat = DateFormat.getTimeInstance(DateFormat.DEFAULT, locale);
+        dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));
         return (eventType == EventType.STAY ? "Стоянка на" : eventType.toString()) + " " + block + " в " + dateFormat.format(new Date(time));
     }
 }
