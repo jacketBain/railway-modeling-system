@@ -15,8 +15,8 @@ import java.security.Principal;
 public class HomeController {
     @Autowired
     CityService cityService;
-    final
-    UserService userService;
+
+    final UserService userService;
 
     public HomeController(UserService userService) {
         this.userService = userService;
