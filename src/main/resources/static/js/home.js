@@ -9,3 +9,7 @@ function openShedule() {
 function openModeling() {
     window.location.href="/startModeling";
 }
+
+function openAboutPage() {
+    window.location.href="/about";
+}

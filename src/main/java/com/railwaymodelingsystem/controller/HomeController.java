@@ -43,4 +43,9 @@ public class HomeController {
         model.addAttribute("stations", user.getStations());
         return "startModeling";
     }
+
+    @GetMapping("/about")
+    public String aboutPage(){
+        return "help";
+    }
 }
