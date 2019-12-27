@@ -52,16 +52,14 @@
                         <span class="input-group-text">С платформой</span>
                     </div>
                     <div class="pl-2 pt-2">
-                        <input type="checkbox" class="form-check-input ml-2" id="editHasPlatform">
+                        <input type="checkbox" class="form-check-input ml-2" id="editHasPlatform" onchange="showEditPlatformGroup()">
                     </div>
-
-
                 </div>
-                <div class="input-group mb-2 mt-2">
+                <div class="input-group mb-2 mt-2" id="editPlatformGroup">
                     <div class="input-group-prepend">
                         <span class="input-group-text">Номер платформы</span>
                     </div>
-                    <input type="number" class="form-control pr-2" id="editPlatformNumber" min="1" max="15">
+                    <input type="number" class="form-control pr-2" id="editPlatformNumber" min="1" max="15" contenteditable="false">
                 </div>
             </div>
             <div class="modal-footer">
@@ -100,22 +98,32 @@
     </div>
 </div>
 
+<div class="modal fade" id="removeLinkModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header flex-column">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Удаление связи</h4>
+            </div>
+            <div class="modal-body">
+                <input id="blockFrom" type="hidden">
+                <input id="blockTo" type="hidden">
+                <div class="form-group pr-4 pl-4 text-center">
+                    <button type="button" class="btn btn-danger" onclick="removeLink()">Удалить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-8">
             <div class="row">
                 <canvas id="canvas"></canvas>
-            </div>
-            <div id="editWay" class="row fixed-bottom bg-light p-2 m-2 w-50" style="display: none">
-
-            </div>
-            <div id="removeLink" class="row fixed-bottom bg-light p-2 m-2 w-50" style="display: none">
-                <input id="blockFrom" type="hidden">
-                <input id="blockTo" type="hidden">
-                <div class="form-group pr-4 pl-4 text-center">
-                    <button type="button" class="btn btn-secondary" onclick="removeLink()">Удалить</button>
-                </div>
             </div>
         </div>
         <div id="instruments" class="col-md-4">
@@ -124,7 +132,7 @@
                     Путь
                 </button>
             </div>
-            <div class="row flex-column bg-light" >
+            <div class="row flex-column bg-light" id="addWayGroup">
                 <div id="addWay" class="row flex-column">
                     <div class="form-group pr-4 pl-4">
                         <label for="inputWayNumber">Номер пути</label>
@@ -137,11 +145,11 @@
                 </div>
             </div>
             <div class="row flex-column pb-2 pt-2">
-                <button class="btn btn-secondary dropdown-toggle flex-column" type="button" aria-haspopup="true" aria-expanded="false" onclick="showAddWay()">
+                <button class="btn btn-secondary dropdown-toggle flex-column" type="button" aria-haspopup="true" aria-expanded="false" onclick="showAddBlock()">
                     Блок-участок
                 </button>
             </div>
-            <div class="row flex-column bg-light" >
+            <div class="row flex-column bg-light" id="addBlockGroup">
                 <div id="addBlock" class="row flex-column">
                     <div class="form-group pr-4 pl-4">
                         <label for="inputBlockName">Имя блок-участка</label>
@@ -158,10 +166,10 @@
                     </div>
 
                     <div class="form-group form-check pl-5 pr-5">
-                        <input type="checkbox" class="form-check-input" id="hasPlatform">
+                        <input type="checkbox" class="form-check-input" id="hasPlatform" onchange="showAddPlatformGroup()" checked="checked">
                         <label class="form-check-label" for="hasPlatform">С платформой</label>
                     </div>
-                    <div class="form-group pr-4 pl-4">
+                    <div class="form-group pr-4 pl-4" id="addPlatformGroup">
                         <label for="inputPlatformNumber">Номер платформы</label>
                         <input type="number" class="form-control pr-2" id="inputPlatformNumber" min="1" max="15">
                     </div>
@@ -175,7 +183,7 @@
                     Связь
                 </button>
             </div>
-            <div class="row flex-column bg-light" >
+            <div class="row flex-column bg-light" id="addArrowGroup">
                 <div class="form-group pr-4 pl-4">
                     <label for="inputBlockFromName">Имя первого блок-участка</label>
                     <input type="text" class="form-control pr-2" id="inputBlockFromName">

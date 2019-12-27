@@ -88,7 +88,7 @@
                         <span class="input-group-text">Из</span>
                     </div>
                     <select class="form-control" id="inputCityFrom">
-                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
+                        <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}" >
                             <option th:text="${city.getName()}"></option>
                         </div>
                     </select>
@@ -97,7 +97,7 @@
                     </div>
                     <select class="form-control" id="inputCityTo">
                         <div th:if="${cityList.size() != 0}" th:each="city : ${cityList}">
-                            <option th:text="${city.getName()}"></option>
+                            <option th:text="${city.getName()}" onchange="createCityChange()"></option>
                         </div>
                     </select>
                 </div>
@@ -105,7 +105,7 @@
             <div class="modal-footer">
                 <div id="stationNameError"></div>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                <button type="button" class="btn btn-primary" onclick="createTrain()">Создать</button>
+                <button type="button" class="btn btn-primary" onclick="createTrain()">Добавить</button>
             </div>
         </div>
     </div>

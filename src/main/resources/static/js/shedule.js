@@ -2,19 +2,20 @@ function createTrain() {
     $.post(
         "/shedule/add_train?station=" + localStorage.getItem("stationName"),
         {
-            'trainNumber' : document.getElementById('inputTrainNumber').value,
-            'platform' : document.getElementById('inputPlatform').value,
-            'way' : document.getElementById('inputWay').value,
-            'type' : document.getElementById('inputType').value,
-            'length' : document.getElementById('inputLength').value,
-            'arriveTime' : document.getElementById('inputArriveTime').value,
-            'departureTime' : document.getElementById('inputDepartureTime').value,
-            'cityFrom' : document.getElementById('inputCityFrom').value,
-            'cityTo' : document.getElementById('inputCityTo').value,
+            'trainNumber' : $('#inputTrainNumber').val(),
+            'platform' : $('#inputPlatform').val(),
+            'way' : $('#inputWay').val(),
+            'type' : $('#inputType').val(),
+            'length' : $('#inputLength').val(),
+            'arriveTime' : $('#inputArriveTime').val(),
+            'departureTime' : $('#inputDepartureTime').val(),
+            'cityFrom' : $('#inputCityFrom').val(),
+            'cityTo' : $('#inputCityTo').val(),
         },
         function (data) {
             processData(data);
-            $('#createTrainModal').modal('toggle');
+            if(data['status'] !== 'ERROR')
+                $('#createTrainModal').modal('toggle');
         }
     );
 }

@@ -1,8 +1,7 @@
-let addArrow = document.getElementById('addArrow');
 let canvas = new fabric.Canvas('canvas', { hoverCursor: 'pointer',
     selection: false,  width: 1000, height: window.innerHeight});
-let isOpenedAddWay;
-let isOpenedAddArrow;
+let isOpenedAddWay = 0, isOpenedAddArrow = 0, isOpenedBlock = 0;
+
 
 let data;
 
@@ -11,6 +10,7 @@ function drawTopology() {
         alert(data['message']);
     }
     else {
+
         canvas.clear();
 
         let leftPadding = 120, blockWidth = 100, blockHeight = 50,
@@ -160,8 +160,10 @@ function drawTopology() {
                     if (block['platformNumber'] !== null) {
                         $('#editHasPlatform').prop('checked', true);
                         $('#editPlatformNumber').val(block['platformNumber']);
+                        $('#editPlatformGroup').show();
                     } else {
                         $('#editHasPlatform').prop('checked', false);
+                        $('#editPlatformGroup').hide();
                     }
                     $('#editBlockModal').modal('toggle');
                 } else if (e.target.type === "text") {
@@ -169,18 +171,12 @@ function drawTopology() {
                     $('#wayNumber').val(e.target.toObject().number);
                     $('#editWayNumber').val(e.target.toObject().number);
                 } else if (e.target.type === "line") {
-                   $('#removeLink').style.display = 'block';
-                    $('#blockFrom').value = e.target.toObject().blockFrom;
-                    $('#blockTo').value = e.target.toObject().blockTo;
+                    $('#blockFrom').val(e.target.toObject().blockFrom);
+                    $('#blockTo').val(e.target.toObject().blockTo);
+                    $('#removeLinkModal').modal('toggle');
                 }
 
             }
-            // ,
-            // 'selection:cleared' : function (e) {
-            //     $('#editBlock').style.display = 'none';
-            //     $('#editWay').style.display = 'none';
-            //     $('#removeLink').style.display = 'none';
-            // }
         });
     }
 }
@@ -190,24 +186,50 @@ function processData(newData) {
         if (newData.status !== "ERROR") {
             data = newData;
             drawTopology();
-
-            let ways;
-
-            for (let i = 0; i < data['ways'].length; i++) {
-                ways += "<option>" + data['ways'][i]['number'] + "</option>";
+            let ways = [];
+            for (let i = 0; i < data['ways'].length; i++){
+                let way = data['ways'][i]['number'];
+                if(!ways.includes(way)){
+                    ways.push(way);
+                }
             }
+            ways.sort();
 
-            document.getElementById('inputWay').innerHTML = ways;
+            let waysHtml;
+            for (let i = 0; i < ways.length; i++) {
+                waysHtml += "<option>" + ways[i] + "</option>";
+            }
+            $('#inputWay').html(waysHtml);
         } else {
             alert(newData.message);
         }
     }
 }
 
+function showEditPlatformGroup() {
+    if($('#editHasPlatform').prop('checked') === true){
+        $('#editPlatformGroup').show();
+    }
+    else{
+        $('#editPlatformGroup').hide();
+        $('#editPlatformNumber').val("");
+    }
+}
+
+function showAddPlatformGroup() {
+    if($('#hasPlatform').prop('checked') === true) {
+        $('#addPlatformGroup').show();
+    }
+    else {
+        $('#addPlatformGroup').hide();
+        $('#hasPlatform').val("");
+    }
+}
+
 function addWay() {
     $.post(
         "/constructor/addWay",
-        {'number': document.getElementById('inputWayNumber').value, 'station': localStorage.getItem("stationName")},
+        {'number': $('#inputWayNumber').val(), 'station': localStorage.getItem("stationName")},
         function (newData) {
             processData(newData);
         }
@@ -215,20 +237,25 @@ function addWay() {
 }
 
 function addBlock() {
-    $.post(
-        "/constructor/addBlock",
-        {'name': document.getElementById('inputBlockName').value, 'way': document.getElementById('inputWay').value, 'length': document.getElementById('inputBlockLength').value,
-        'platformNumber': document.getElementById('hasPlatform').checked ? document.getElementById('inputPlatformNumber').value : null, 'station': localStorage.getItem("stationName")},
-        function (newData) {
-            processData(newData);
-        }
-    );
+    if($('#hasPlatform').prop('checked') === true && $('#inputPlatformNumber').val() === ""){
+        alert("Номер платформы не может быть пустым");
+    }
+    else{
+        $.post(
+            "/constructor/addBlock",
+            {'name': $('#inputBlockName').val(), 'way': $('#inputWay').val(), 'length': $('#inputBlockLength').val(),
+                'platformNumber': document.getElementById('hasPlatform').checked ? $('#inputPlatformNumber').val() : null, 'station': localStorage.getItem("stationName")},
+            function (newData) {
+                processData(newData);
+            }
+        );
+    }
 }
 
 function addLink() {
     $.post(
         "/constructor/addLink",
-        {'blockFrom': document.getElementById('inputBlockFromName').value, 'blockTo': document.getElementById('inputBlockToName').value, 'station': localStorage.getItem("stationName")},
+        {'blockFrom': $('#inputBlockFromName').val(), 'blockTo': $('#inputBlockToName').val(), 'station': localStorage.getItem("stationName")},
         function (newData) {
             processData(newData);
         }
@@ -237,8 +264,8 @@ function addLink() {
 
 function editWay() {
     $.post(
-        "/constructor/editWay?old_number=" + document.getElementById('wayNumber').value,
-        {'number': document.getElementById('editWayNumber').value, 'station': localStorage.getItem("stationName")},
+        "/constructor/editWay?old_number=" + $('#wayNumber').val(),
+        {'number': $('#editWayNumber').val(), 'station': localStorage.getItem("stationName")},
         function (newData) {
             if(newData.status !== 'ERROR'){
                 $('#editWayModal').modal('toggle');
@@ -249,12 +276,26 @@ function editWay() {
 }
 
 function editBlock() {
+    let length = $('#editBlockLength').val().toString();
+    if(length.split('.').length > 1) {
+        if(parseInt(length.split('.')[1]) !== 0){
+            alert("Длина может быть только целым числом");
+        }
+        else{
+            length = $('#editBlockLength').val().toString().split('.')[0];
+        }
+    }
     $.post(
-        "/constructor/editBlock?old_name=" + document.getElementById('blockName').value,
-        {'name': document.getElementById('editBlockName').value, 'way': document.getElementById('editBlockWay').value, 'length': document.getElementById('editBlockLength').value,
-            'platformNumber': document.getElementById('editPlatformNumber').value, 'station': localStorage.getItem("stationName")},
+        "/constructor/editBlock?old_name=" + $('#blockName').val(),
+        {
+            'name': $('#editBlockName').val(),
+            'way': $('#editBlockWay').val(),
+            'length': length,
+            'platformNumber': $('#editPlatformNumber').val(),
+            'station': localStorage.getItem("stationName")
+        },
         function (newData) {
-            if(newData.status !== 'ERROR'){
+            if (newData.status !== 'ERROR') {
                 $('#editBlockModal').modal('toggle');
             }
             processData(newData);
@@ -291,6 +332,7 @@ function removeBlock() {
 }
 
 function removeLink() {
+    $('#removeLinkModal').modal('toggle');
     $.get(
         "/constructor/removeLink",
         {'blockFrom': document.getElementById('blockFrom').value,
@@ -302,25 +344,37 @@ function removeLink() {
     )
 }
 
+
 function showAddWay(){
     if(isOpenedAddWay === 0){
-        addWay.style.display = 'block';
+        $('#addWayGroup').hide();
         isOpenedAddWay = 1;
     }
     else{
-        addWay.style.display = 'none';
+        $('#addWayGroup').show();
         isOpenedAddWay = 0;
     }
 }
 
 function showAddArrow(){
     if(isOpenedAddArrow === 0){
-        addArrow.style.display = 'block';
+        $('#addArrowGroup').hide();
         isOpenedAddArrow = 1;
     }
     else{
-        addArrow.style.display = 'none';
+        $('#addArrowGroup').show();
         isOpenedAddArrow = 0;
+    }
+}
+
+function showAddBlock(){
+    if(isOpenedBlock === 0){
+        $('#addBlockGroup').hide();
+        isOpenedBlock = 1;
+    }
+    else{
+        $('#addBlockGroup').show();
+        isOpenedBlock = 0;
     }
 }
 

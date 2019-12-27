@@ -31,6 +31,11 @@ public class LinkServiceImpl implements LinkService {
     }
 
     @Override
+    public List<Link> getBlocksByBlockTo(Block blockTo) {
+        return linkRepository.getLinksByBlockTo(blockTo);
+    }
+
+    @Override
     public Link addLink(Link link) {
         return linkRepository.saveAndFlush(link);
     }

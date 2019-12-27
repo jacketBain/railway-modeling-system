@@ -10,4 +10,5 @@ public interface LinkRepository extends JpaRepository<Link,String> {
     List<Link> getLinksByBlockFrom(Block blockFrom);
     List<Link> getByBlockFromAndBlockTo(Block blockFrom, Block blockTo);
     List<Link> getByBlockFromOrBlockTo(Block blockFrom, Block blockTo);
+    List<Link> getLinksByBlockTo(Block blockTo);
 }

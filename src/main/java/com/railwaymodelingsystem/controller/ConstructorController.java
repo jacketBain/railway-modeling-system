@@ -238,10 +238,12 @@ public class ConstructorController {
         } else if (blockService.findByNameAndStation(link.getBlockFrom(), station).size() == 0 ||
                 blockService.findByNameAndStation(link.getBlockTo(), station).size() == 0) {
             return ResponseEntity.ok(new AjaxResponseBody("Один или несколько блок-участков не существует", "ERROR"));
-        } else if (linkService.getByBlockFromAndBlockTo(blockFromList.get(0), blockToList.get(0)).size() != 0) {
-            return ResponseEntity.ok(new AjaxResponseBody("Блоки уже связаны", "ERROR"));
-        } else if (linkService.getByBlockFromAndBlockTo(blockFromList.get(0), blockToList.get(0)).size() == 1) {
+        } else if (linkService.getByBlockFromOrBlockTo(blockFromList.get(0), blockToList.get(0)).size() != 0 || linkService.getByBlockFromAndBlockTo(blockToList.get(0), blockFromList.get(0)).size() != 0) {
+            return ResponseEntity.ok(new AjaxResponseBody("Блоки уже связаны или провести связь невозможно", "ERROR"));
+        } else if (linkService.getByBlockFromOrBlockTo(blockFromList.get(0), blockToList.get(0)).size() == 1) {
             return ResponseEntity.ok(new AjaxResponseBody("Уже существует обратная связь", "ERROR"));
+        } else if (link.getBlockFrom() == link.getBlockTo()) {
+            return ResponseEntity.ok(new AjaxResponseBody("Нельзя соединить блок самим с собой", "ERROR"));
         }
         Link newLink = new Link();
         newLink.setBlockFrom(blockFromList.get(0));

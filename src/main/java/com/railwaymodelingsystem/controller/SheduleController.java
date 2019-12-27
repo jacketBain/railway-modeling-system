@@ -127,6 +127,17 @@ public class SheduleController {
 
         City cityFrom = cityService.getCityByName(shedule.getCityFrom());
         City cityTo = cityService.getCityByName(shedule.getCityTo());
+
+        if(station != null) {
+            List<Shedule> sheduleList = sheduleService.getShedulesByStation(station);
+            for (Shedule shedule1 : sheduleList) {
+                if(shedule1.getKey().getTrainNumber().equals(shedule.getTrainNumber())){
+                    return ResponseEntity.ok(new AjaxResponseBody("Номер поезда должен быть уникальным", "ERROR"));
+                }
+            }
+        }
+
+
         try {
             arriveDate = dateFormat.parse(shedule.getArriveTime());
             departDate = dateFormat.parse(shedule.getDepartureTime());
@@ -135,6 +146,8 @@ public class SheduleController {
         }
         if (station == null) {
             return ResponseEntity.ok(new AjaxResponseBody("Неверная станция", "ERROR"));
+        } else if(shedule.getTrainNumber() == null){
+            return ResponseEntity.ok(new AjaxResponseBody("Необходимо указать номер поезда", "ERROR"));
         } else if(shedule.getTrainNumber() < 1){
             return ResponseEntity.ok(new AjaxResponseBody("Номер поезда может быть только положительным", "ERROR"));
         } else if(shedule.getPlatform() < 1) {
@@ -143,13 +156,16 @@ public class SheduleController {
             return ResponseEntity.ok(new AjaxResponseBody("Такого пути нет на станции", "ERROR"));
         } else if(trainType == null) {
             return ResponseEntity.ok(new AjaxResponseBody("Недопустимый тип поезда", "ERROR"));
-        } else if(trainLength == null || trainLength < 0 || trainLength > 71) {
+        } else if(trainLength == null || trainLength <= 0 || trainLength > 71) {
             return ResponseEntity.ok(new AjaxResponseBody("Длина поезда должна быть в диапазоне от 1 до 71 вагона", "ERROR"));
         } else if(cityFrom == null ||
-                cityTo == null) {
+                cityTo == null || cityFrom == cityTo) {
             return ResponseEntity.ok(new AjaxResponseBody("Некорректный маршрут следования", "ERROR"));
+        } else if(departDate.getTime() < arriveDate.getTime()) {
+            return ResponseEntity.ok(new AjaxResponseBody("Время отправления должно быть больше времени прибытия или равно ему, если поезд транзитный", "ERROR"));
+        } else if(sheduleService.getShedulesByArriveTimeAndWay(new Time(arriveDate.getTime()), wayList.get(0)).size() != 0){
+            return ResponseEntity.ok(new AjaxResponseBody("Два поезда не могут прийти на один путь в одно и то же время", "ERROR"));
         }
-
         ShedulePrimary key = new ShedulePrimary();
         key.setTrainNumber(shedule.getTrainNumber());
         key.setStationId(station.getId());
@@ -202,6 +218,16 @@ public class SheduleController {
         shedulePrimary.setStationId(station.getId());
         shedulePrimary.setTrainNumber(oldNumber);
         List<Shedule> sheduleList = sheduleService.getByKey(shedulePrimary);
+
+        if(station != null) {
+            List<Shedule> sheduleList2 = sheduleService.getShedulesByStation(station);
+            for (Shedule shedule1 : sheduleList2) {
+                if(shedule1.getKey().getTrainNumber().equals(shedule.getTrainNumber()) && !shedule.getTrainNumber().equals(oldNumber)){
+                    return ResponseEntity.ok(new AjaxResponseBody("Поезд с таким номером уже есть в расписании", "ERROR"));
+                }
+            }
+        }
+
         if (sheduleList.size() == 0) {
             return ResponseEntity.ok(new AjaxResponseBody("Нет такого расписания", "ERROR"));
         } else if(shedule.getTrainNumber() < 1){
@@ -212,11 +238,13 @@ public class SheduleController {
             return ResponseEntity.ok(new AjaxResponseBody("Такого пути нет на станции", "ERROR"));
         } else if(trainType == null) {
             return ResponseEntity.ok(new AjaxResponseBody("Недопустимый тип поезда", "ERROR"));
-        } else if(trainLength < 0 || trainLength > 71) {
+        } else if(trainLength <= 0 || trainLength > 71) {
             return ResponseEntity.ok(new AjaxResponseBody("Длина поезда должна быть в диапазоне от 1 до 71 вагона", "ERROR"));
         } else if(cityFrom == null ||
                 cityTo == null) {
             return ResponseEntity.ok(new AjaxResponseBody("Некорректный маршрут следования", "ERROR"));
+        } else if(departureDate.getTime() < arriveDate.getTime()) {
+            return ResponseEntity.ok(new AjaxResponseBody("Время отправления должно быть больше времени прибытия или равно ему, если поезд транзитный", "ERROR"));
         }
 
         Shedule oldShedule = sheduleList.get(0);

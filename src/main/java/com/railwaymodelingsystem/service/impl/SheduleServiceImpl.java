@@ -2,12 +2,14 @@ package com.railwaymodelingsystem.service.impl;
 
 import com.railwaymodelingsystem.model.rms.Shedule;
 import com.railwaymodelingsystem.model.rms.Station;
+import com.railwaymodelingsystem.model.rms.Way;
 import com.railwaymodelingsystem.model.rms.compositeKey.ShedulePrimary;
 import com.railwaymodelingsystem.repository.SheduleRepository;
 import com.railwaymodelingsystem.service.SheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.sql.Time;
 import java.util.List;
 
 @Service
@@ -28,6 +30,11 @@ public class SheduleServiceImpl implements SheduleService {
     @Override
     public List<Shedule> getByKey(ShedulePrimary shedulePrimary) {
         return sheduleRepository.getByKey(shedulePrimary);
+    }
+
+    @Override
+    public List<Shedule> getShedulesByArriveTimeAndWay(Time arriveTime, Way way) {
+        return sheduleRepository.getShedulesByArriveTimeAndWay(arriveTime, way);
     }
 
     @Override
