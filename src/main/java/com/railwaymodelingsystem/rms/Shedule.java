@@ -17,6 +17,10 @@ public class Shedule {
 
     @NotNull
     @Getter
+    private Integer platformNumber;
+
+    @NotNull
+    @Getter
     private Long arriveTime;
 
     @NotNull

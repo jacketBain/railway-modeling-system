@@ -83,7 +83,7 @@ public class Schedule {
                 if (shedule.getWay() == block.getWay()) {
                     if (shedule.getTrain().getTrainType() == TrainType.CARGO) {
                         trips.add(new Trip(new ArrayList<>(blocks), block));
-                    } else if (block.getHasPlatform()) {
+                    } else if (block.getHasPlatform() && block.getPlatformNumber().equals(shedule.getPlatformNumber())) {
                         trips.add(new Trip(new ArrayList<>(blocks), block));
                     }
                 }

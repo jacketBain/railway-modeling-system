@@ -96,23 +96,23 @@ public class Scheduler {
 
         Long arriveTime1 = dateFormat.parse("00:10:00").getTime();
         Long departureTime1 = dateFormat.parse("00:30:00").getTime();
-        Shedule shedule1 = new Shedule(train1, way1, arriveTime1, departureTime1);
-        Shedule shedule2 = new Shedule(train2, way2, arriveTime1, departureTime1);
+        Shedule shedule1 = new Shedule(train1, way1, 1, arriveTime1, departureTime1);
+        Shedule shedule2 = new Shedule(train2, way2, 2, arriveTime1, departureTime1);
 
         Long arriveTime2 = dateFormat.parse("00:40:00").getTime();
         Long departureTime2 = dateFormat.parse("01:10:00").getTime();
-        Shedule shedule3 = new Shedule(train3, way1, arriveTime2, departureTime2);
-        Shedule shedule4 = new Shedule(train4, way2, arriveTime2, departureTime2);
+        Shedule shedule3 = new Shedule(train3, way1, 1, arriveTime2, departureTime2);
+        Shedule shedule4 = new Shedule(train4, way2, 2, arriveTime2, departureTime2);
 
         Long arriveTime3 = dateFormat.parse("01:20:00").getTime();
         Long departureTime3 = dateFormat.parse("01:50:00").getTime();
-        Shedule shedule5 = new Shedule(train5, way1, arriveTime3, departureTime3);
-        Shedule shedule6 = new Shedule(train6, way2, arriveTime3, departureTime3);
+        Shedule shedule5 = new Shedule(train5, way1, 1, arriveTime3, departureTime3);
+        Shedule shedule6 = new Shedule(train6, way2, 2, arriveTime3, departureTime3);
 
         Long arriveTime4 = dateFormat.parse("02:00:00").getTime();
         Long departureTime4 = dateFormat.parse("02:30:00").getTime();
-        Shedule shedule7 = new Shedule(train7, way1, arriveTime4, departureTime4);
-        Shedule shedule8 = new Shedule(train8, way2, arriveTime4, departureTime4);
+        Shedule shedule7 = new Shedule(train7, way1, 1,arriveTime4, departureTime4);
+        Shedule shedule8 = new Shedule(train8, way2, 2, arriveTime4, departureTime4);
 
         List<Shedule> shedules = new ArrayList<>(Arrays.asList(shedule1, shedule2, shedule3, shedule4,
                                                                 shedule5, shedule6, shedule7, shedule8));
@@ -189,7 +189,7 @@ public class Scheduler {
                     shedule.getTrainLength(),
                     cityFrom, cityTo
                     );
-            Shedule newShedule = new Shedule(train, wayNewWayMap.get(shedule.getWay()),
+            Shedule newShedule = new Shedule(train, wayNewWayMap.get(shedule.getWay()), shedule.getPlatformNumber(),
                     shedule.getArriveTime().getTime(), shedule.getDepartureTime().getTime() + 60 * 1000);
             newShedules.add(newShedule);
         }
